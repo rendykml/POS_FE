@@ -1,5 +1,3 @@
-import Login from "./pages/login";
-
 export default function App() {
-  return <Login />;
+  return <h1 className="text-red-500 text-5xl">Test</h1>;
 }
