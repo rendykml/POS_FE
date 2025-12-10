@@ -1,32 +1,46 @@
-import * as Icons from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useRBACStore } from "../store/rbacStore";
 import { useAuthStore } from "../store/authStore";
-import { menuByRole } from "../constants/menu";
+import * as Icons from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
-  const role = useAuthStore((state) => state.role);
-  const menus = menuByRole[role] || [];
-  const location = useLocation();
+  const role = useAuthStore((s) => s.role);
+  const permissions = useRBACStore((s) => s.permissions);
+
+  if (!permissions[role]) return null;
+
+  const allowedMenus = Object.entries(permissions[role])
+    .filter(([_, perm]) => perm.read)
+    .map(([key]) => key);
+
+  const menuConfig = {
+    dashboard: { name: "Dashboard", icon: "Home", path: `/${role}` },
+    products: { name: "Produk", icon: "Package", path: "/admin/products" },
+    categories: { name: "Kategori", icon: "Tags", path: "/admin/categories" },
+    stock_in: { name: "Stok Masuk", icon: "PackagePlus", path: `/${role}/stock-in` },
+    stock_out: { name: "Stok Keluar", icon: "PackageMinus", path: `/${role}/stock-out` },
+    sales: { name: "Transaksi", icon: "ShoppingCart", path: "/kasir/sales" },
+    sales_report: { name: "Laporan Penjualan", icon: "FileBarChart", path: `/${role}/sales-report` },
+    rbac: { name: "RBAC", icon: "ShieldCheck", path: "/admin/rbac" },
+  };
 
   return (
-    <aside className="w-64 bg-gray-900 text-white min-h-screen p-5">
-      <h1 className="text-xl font-bold mb-8">POS System</h1>
+    <aside className="w-64 bg-gray-900 text-white p-5">
+      <nav>
+        {allowedMenus.map((menuKey) => {
+          const item = menuConfig[menuKey];
+          if (!item) return null;
 
-      <nav className="space-y-2">
-        {menus.map((item, i) => {
-          const LucideIcon = Icons[item.icon];
-
-          const isActive = location.pathname === item.path;
+          const Icon = Icons[item.icon];
 
           return (
             <NavLink
-              key={i}
+              key={menuKey}
               to={item.path}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer 
-                ${isActive ? "bg-cyan-600" : "hover:bg-gray-700"}`}
+              className="flex items-center gap-3 p-3 rounded hover:bg-gray-700"
             >
-              <LucideIcon size={20} />
-              <span>{item.name}</span>
+              <Icon size={20} />
+              {item.name}
             </NavLink>
           );
         })}
