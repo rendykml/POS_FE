@@ -7,14 +7,17 @@ export const menuByRole = {
     { name: "Kategori", icon: "Tags", path: "/admin/categories" },
     { name: "Stok Masuk", icon: "PackagePlus", path: "/admin/stock-in" },
     { name: "Stok Keluar", icon: "PackageMinus", path: "/admin/stock-out" },
-    { name: "Laporan Penjualan", icon: "FileBarChart", path: "/admin/reports" },
+    {
+      name: "Laporan Penjualan",
+      icon: "FileBarChart",
+      path: "/admin/sales-report",
+    },
   ],
 
   kasir: [
     { name: "Dashboard", icon: "LayoutDashboard", path: "/kasir" },
     { name: "Transaksi Penjualan", icon: "ShoppingCart", path: "/kasir/sales" },
     { name: "Riwayat Transaksi", icon: "History", path: "/kasir/history" },
-    { name: "Laporan Penjualan", icon: "FileBarChart", path: "/kasir/reports" },
   ],
 
   gudang: [
