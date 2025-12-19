@@ -1,72 +1,109 @@
-import { useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import ProductFormModal from "../../components/ProductFormModal";
 import Swal from "sweetalert2";
 import { Pencil, Trash2, PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 export default function ProductPage() {
-  const categoriesDummy = [
-    { id: 1, name: "Atasan" },
-    { id: 2, name: "Bawahan" },
-    { id: 3, name: "Aksesoris" },
-  ];
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const [products, setProducts] = useState([
-    { id: 1, name: "Kemeja Polos", cost: 60000, price: 120000, category_id: 1, stock: 10 },
-    { id: 2, name: "Celana Jeans", cost: 90000, price: 200000, category_id: 2, stock: 5 },
-  ]);
+  const fetchCategories = async () => {
+    const res = await api.get("/categories");
+    setCategories(res.data.data);
+  };
+  const fetchProducts = async () => {
+    const res = await api.get("/products");
+    setProducts(res.data.data);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts();
+  }, []);
 
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState({
     id: null,
     name: "",
-    cost: "",
-    price: "",
     category_id: "",
+    price: "",
+    cost: "",
     stock: "",
+    low_stock_threshold: "",
   });
 
   const openAdd = () => {
-    setFormData({ id: null, name: "", cost: "", price: "", category_id: "", stock: "" });
+    setFormData({
+      id: null,
+      name: "",
+      category_id: "",
+      price: "",
+      cost: "",
+      stock: "",
+      low_stock_threshold: "",
+    });
     setOpenModal(true);
   };
 
   const openEdit = (p) => {
-    setFormData(p);
+    setFormData({
+      id: p.id,
+      name: p.name,
+      category_id: p.category_id,
+      price: p.price,
+      cost: p.cost,
+      stock: p.stock,
+      low_stock_threshold: p.low_stock_threshold,
+    });
     setOpenModal(true);
   };
 
-  const saveProduct = () => {
-    if (!formData.name || !formData.price || !formData.category_id) {
-      Swal.fire("Error", "Semua field wajib diisi", "error");
-      return;
-    }
+  const saveProduct = async () => {
+    try {
+      if (formData.id) {
+        await api.put(`/products/${formData.id}`, {
+          name: formData.name,
+          price: formData.price,
+          cost: formData.cost,
+          stock: formData.stock,
+          low_stock_threshold: formData.low_stock_threshold,
+        });
+        Swal.fire("Berhasil", "Produk diperbarui", "success");
+      } else {
+        await api.post("/products", {
+          name: formData.name,
+          category_id: formData.category_id,
+          price: formData.price,
+          cost: formData.cost,
+          stock: formData.stock,
+          low_stock_threshold: formData.low_stock_threshold,
+        });
+        Swal.fire("Berhasil", "Produk ditambahkan", "success");
+      }
 
-    if (formData.id) {
-      // Edit
-      setProducts(products.map(p => p.id === formData.id ? formData : p));
-      Swal.fire("Berhasil", "Produk berhasil diperbarui!", "success");
-    } else {
-      // Add
-      const newProduct = { ...formData, id: Date.now() };
-      setProducts([...products, newProduct]);
-      Swal.fire("Berhasil", "Produk baru ditambahkan!", "success");
+      setOpenModal(false);
+      fetchProducts();
+    } catch (err) {
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Gagal menyimpan produk",
+        "error"
+      );
     }
-
-    setOpenModal(false);
   };
 
-  const deleteProduct = (id) => {
+  const deleteProduct = async (id) => {
     Swal.fire({
       title: "Hapus produk?",
-      text: "Data tidak dapat dikembalikan!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Hapus",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setProducts(products.filter((p) => p.id !== id));
-        Swal.fire("Berhasil", "Produk dihapus!", "success");
+    }).then(async (res) => {
+      if (res.isConfirmed) {
+        await api.delete(`/products/${id}`);
+        fetchProducts();
+        Swal.fire("Berhasil", "Produk dihapus", "success");
       }
     });
   };
@@ -104,16 +141,20 @@ export default function ProductPage() {
                 <td className="p-2">{p.name}</td>
                 <td className="p-2">Rp {p.cost.toLocaleString()}</td>
                 <td className="p-2">Rp {p.price.toLocaleString()}</td>
-                <td className="p-2">
-                  {categoriesDummy.find((c) => c.id === p.category_id)?.name}
-                </td>
+                <td className="p-2">{p.category?.name}</td>
                 <td className="p-2">{p.stock}</td>
 
                 <td className="p-2 flex gap-3">
-                  <button onClick={() => openEdit(p)} className="text-blue-600 hover:text-blue-800">
+                  <button
+                    onClick={() => openEdit(p)}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
                     <Pencil size={18} />
                   </button>
-                  <button onClick={() => deleteProduct(p.id)} className="text-red-600 hover:text-red-800">
+                  <button
+                    onClick={() => deleteProduct(p.id)}
+                    className="text-red-600 hover:text-red-800"
+                  >
                     <Trash2 size={18} />
                   </button>
                 </td>
@@ -130,7 +171,7 @@ export default function ProductPage() {
         formData={formData}
         setFormData={setFormData}
         onSubmit={saveProduct}
-        categories={categoriesDummy}
+        categories={categories}
       />
     </DashboardLayout>
   );
