@@ -15,91 +15,91 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   // Kalo udah ada backend, aktifin ini
-  const handleLogin = async () => {
-    setError("");
-    setLoading(true);
-
-    try {
-      const res = await axios.post("/login", {
-        username,
-        password,
-      });
-
-      login({
-        user: res.data.user,
-        token: res.data.token,
-        role: res.data.user.role,
-      });
-
-      // redirect sesuai role
-      if (res.data.user.role === "admin") navigate("/admin");
-      if (res.data.user.role === "kasir") navigate("/kasir");
-      if (res.data.user.role === "gudang") navigate("/gudang");
-    } catch (err) {
-      // SERVER TIDAK MERESPON
-      if (!err.response) {
-        setError(
-          "Tidak dapat terhubung ke server. Periksa koneksi internet atau server belum berjalan."
-        );
-      }
-
-      // STATUS DIKIRIM DARI BACKEND
-      else if (err.response.status === 401) {
-        setError("Username atau password salah!");
-      } else if (err.response.status === 500) {
-        setError("Terjadi kesalahan pada server. Coba beberapa saat lagi.");
-      } else {
-        setError("Terjadi kesalahan saat mencoba login.");
-      }
-    } finally {
-      setLoading(false); // stop loading
-    }
-  };
-
-  // Sementara untuk login dummy tanpa backend
   // const handleLogin = async () => {
-  //   const dummyUsers = [
-  //     {
-  //       username: "admin",
-  //       password: "admin123",
-  //       role: "admin",
-  //       token: "admintoken123",
-  //     },
-  //     {
-  //       username: "kasir",
-  //       password: "kasir123",
-  //       role: "kasir",
-  //       token: "kasirtoken123",
-  //     },
-  //     {
-  //       username: "gudang",
-  //       password: "gudang123",
-  //       role: "gudang",
-  //       token: "gudangtoken123",
-  //     },
-  //   ];
+  //   setError("");
+  //   setLoading(true);
 
-  //   const found = dummyUsers.find(
-  //     (u) => u.username === username && u.password === password
-  //   );
+  //   try {
+  //     const res = await axios.post("/login", {
+  //       username,
+  //       password,
+  //     });
 
-  //   if (!found) {
-  //     alert("Username atau password salah!");
-  //     return;
+  //     login({
+  //       user: res.data.user,
+  //       token: res.data.token,
+  //       role: res.data.user.role,
+  //     });
+
+  //     // redirect sesuai role
+  //     if (res.data.user.role === "admin") navigate("/admin");
+  //     if (res.data.user.role === "kasir") navigate("/kasir");
+  //     if (res.data.user.role === "gudang") navigate("/gudang");
+  //   } catch (err) {
+  //     // SERVER TIDAK MERESPON
+  //     if (!err.response) {
+  //       setError(
+  //         "Tidak dapat terhubung ke server. Periksa koneksi internet atau server belum berjalan."
+  //       );
+  //     }
+
+  //     // STATUS DIKIRIM DARI BACKEND
+  //     else if (err.response.status === 401) {
+  //       setError("Username atau password salah!");
+  //     } else if (err.response.status === 500) {
+  //       setError("Terjadi kesalahan pada server. Coba beberapa saat lagi.");
+  //     } else {
+  //       setError("Terjadi kesalahan saat mencoba login.");
+  //     }
+  //   } finally {
+  //     setLoading(false); // stop loading
   //   }
-
-  //   // Simpan ke Zustand
-  //   login({
-  //     user: { username: found.username, role: found.role },
-  //     token: found.token,
-  //     role: found.role,
-  //   });
-
-  //   // Redirect sesuai role
-  //   if (found.role === "admin") navigate("/admin");
-  //   if (found.role === "kasir") navigate("/kasir");
-  //   if (found.role === "gudang") navigate("/gudang");
   // };
+
+  //Sementara untuk login dummy tanpa backend
+  const handleLogin = async () => {
+    const dummyUsers = [
+      {
+        username: "admin",
+        password: "admin123",
+        role: "admin",
+        token: "admintoken123",
+      },
+      {
+        username: "kasir",
+        password: "kasir123",
+        role: "kasir",
+        token: "kasirtoken123",
+      },
+      {
+        username: "gudang",
+        password: "gudang123",
+        role: "gudang",
+        token: "gudangtoken123",
+      },
+    ];
+
+    const found = dummyUsers.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (!found) {
+      alert("Username atau password salah!");
+      return;
+    }
+
+    // Simpan ke Zustand
+    login({
+      user: { username: found.username, role: found.role },
+      token: found.token,
+      role: found.role,
+    });
+
+    // Redirect sesuai role
+    if (found.role === "admin") navigate("/admin");
+    if (found.role === "kasir") navigate("/kasir");
+    if (found.role === "gudang") navigate("/gudang");
+  };
 
   return (
     <div

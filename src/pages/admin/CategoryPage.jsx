@@ -1,26 +1,38 @@
-import { useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import Swal from "sweetalert2";
 import { Pencil, Trash2, PlusCircle } from "lucide-react";
 import CategoryFormModal from "../../components/CategoryFormModal";
+import { useEffect, useState } from "react";
+import api from "../../services/api";
 
 export default function CategoryPage() {
-  // Dummy data kategori
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Atasan" },
-    { id: 2, name: "Bawahan" },
-    { id: 3, name: "Aksesoris" },
-  ]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get("/categories");
+      setCategories(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const [openModal, setOpenModal] = useState(false);
 
   const [formData, setFormData] = useState({
     id: null,
     name: "",
+    slug: "",
+    description: "",
   });
+  
 
   const openAdd = () => {
-    setFormData({ id: null, name: "" });
+    setFormData({ id: null, name: "", description: "", slug: "" });
     setOpenModal(true);
   };
 
@@ -29,42 +41,59 @@ export default function CategoryPage() {
     setOpenModal(true);
   };
 
-  const saveCategory = () => {
+  const saveCategory = async () => {
+    try {
+      await api.post("/categories", {
+        name: formData.name,
+        description: formData.description || null,
+        slug: formData.slug,
+      });
+
+      Swal.fire("Berhasil", "Kategori ditambahkan", "success");
+      fetchCategories();
+    } catch (err) {
+      Swal.fire("Error", err.response.data.message, "error");
+    }
+  };
+  const updateCategory = async () => {
+    try {
+      await api.put(`/categories/${formData.id}`, {
+        name: formData.name,
+        description: formData.description || null,
+        slug: formData.slug,
+      });
+
+      Swal.fire("Berhasil", "Kategori diperbarui", "success");
+      fetchCategories();
+    } catch (err) {
+      Swal.fire("Error", err.response.data.message, "error");
+    }
+  };
+  const onSubmit = async () => {
     if (!formData.name) {
-      Swal.fire("Error", "Nama kategori tidak boleh kosong", "error");
+      Swal.fire("Error", "Nama kategori wajib diisi", "error");
       return;
     }
 
-    // EDIT
     if (formData.id) {
-      const updated = categories.map((c) =>
-        c.id === formData.id ? formData : c
-      );
-      setCategories(updated);
-      Swal.fire("Berhasil", "Kategori berhasil diperbarui!", "success");
-    }
-    // ADD
-    else {
-      const newCategory = { ...formData, id: Date.now() };
-      setCategories([...categories, newCategory]);
-      Swal.fire("Berhasil", "Kategori baru berhasil ditambahkan!", "success");
+      await updateCategory();
+    } else {
+      await saveCategory();
     }
 
     setOpenModal(false);
   };
 
-  const deleteCategory = (id) => {
+  const deleteCategory = async (id) => {
     Swal.fire({
       title: "Hapus kategori?",
-      text: "Data tidak dapat dikembalikan!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Hapus",
-      cancelButtonText: "Batal",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setCategories(categories.filter((c) => c.id !== id));
-        Swal.fire("Berhasil!", "Kategori berhasil dihapus!", "success");
+        await api.delete(`/categories/${id}`);
+        fetchCategories();
+        Swal.fire("Berhasil", "Kategori dihapus", "success");
       }
     });
   };
@@ -88,6 +117,8 @@ export default function CategoryPage() {
           <thead>
             <tr className="bg-gray-100 border-b">
               <th className="p-2">Nama Kategori</th>
+              <th className="p-2">Slug</th>
+              <th className="p-2">Deskripsi</th>
               <th className="p-2">Aksi</th>
             </tr>
           </thead>
@@ -96,6 +127,8 @@ export default function CategoryPage() {
             {categories.map((c) => (
               <tr key={c.id} className="border-b hover:bg-gray-50">
                 <td className="p-2">{c.name}</td>
+                <td className="p-2 text-gray-500">{c.slug}</td>
+                <td className="p-2">{c.description || "-"}</td>
 
                 <td className="p-2 flex gap-3">
                   <button
@@ -124,7 +157,7 @@ export default function CategoryPage() {
         onClose={() => setOpenModal(false)}
         formData={formData}
         setFormData={setFormData}
-        onSubmit={saveCategory}
+        onSubmit={onSubmit}
       />
     </DashboardLayout>
   );
