@@ -1,30 +1,93 @@
-export const menuByRole = {
-  admin: [
-    { name: "Dashboard", icon: "LayoutDashboard", path: "/admin" },
-    { name: "User Management", icon: "Users", path: "/admin/users" },
-    { name: "Role & Menu Access", icon: "ShieldCheck", path: "/admin/rbac" },
-    { name: "Produk", icon: "Package", path: "/admin/products" },
-    { name: "Kategori", icon: "Tags", path: "/admin/categories" },
-    { name: "Stok Masuk", icon: "PackagePlus", path: "/admin/stock-in" },
-    { name: "Stok Keluar", icon: "PackageMinus", path: "/admin/stock-out" },
-    {
-      name: "Laporan Penjualan",
-      icon: "FileBarChart",
-      path: "/admin/sales-report",
-    },
-  ],
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Package,
+  Users,
+  BarChart3,
+  Boxes,
+  Archive,
+} from "lucide-react";
 
-  kasir: [
-    { name: "Dashboard", icon: "LayoutDashboard", path: "/kasir" },
-    { name: "Transaksi Penjualan", icon: "ShoppingCart", path: "/kasir/sales" },
-    { name: "Riwayat Transaksi", icon: "History", path: "/kasir/history" },
-  ],
+export const sidebarMenuByRole = {
+  admin: {
+    main: [
+      {
+        icon: LayoutDashboard,
+        name: "Dashboard",
+        path: "/admin",
+      },
+      {
+        icon: Users,
+        name: "Users",
+        path: "/admin/users",
+      },
+      {
+        icon: Package,
+        name: "Products",
+        path: "/admin/products",
+        
+      },
+      {
+        icon: Boxes,
+        name: "Categories",
+        path: "/admin/categories",
+      },
+    ],
+    others: [
+      {
+        icon: BarChart3,
+        name: "Reports",
+        path: "/admin/sales-report",
+      },
+    ],
+  },
 
-  gudang: [
-    { name: "Dashboard", icon: "LayoutDashboard", path: "/gudang" },
-    { name: "Produk", icon: "PackageSearch", path: "/gudang/products" },
-    { name: "Stok Menipis", icon: "Bell", path: "/gudang/low-stock" },
-    { name: "Stok Masuk", icon: "PackagePlus", path: "/gudang/stock-in" },
-    { name: "Stok Keluar", icon: "PackageMinus", path: "/gudang/stock-out" },
-  ],
+  kasir: {
+    main: [
+      {
+        icon: LayoutDashboard,
+        name: "Dashboard",
+        path: "/kasir",
+      },
+      {
+        icon: ShoppingCart,
+        name: "Sales",
+        path: "/kasir/sales",
+      },
+    ],
+    others: [
+      {
+        icon: BarChart3,
+        name: "Sales Report",
+        path: "/kasir/sales-report",
+      },
+    ],
+  },
+
+  gudang: {
+    main: [
+      {
+        icon: LayoutDashboard,
+        name: "Dashboard",
+        path: "/gudang",
+      },
+      {
+        icon: Archive,
+        name: "Stock In",
+        path: "/gudang/stock-in",
+      },
+      {
+        icon: Archive,
+        name: "Stock Out",
+        path: "/gudang/stock-out",
+      },
+    ],
+    others: [
+      {
+        icon: Package,
+        name: "Low Stock",
+        path: "/gudang/low-stock",
+      },
+    ],
+  },
 };

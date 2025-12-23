@@ -1,19 +1,43 @@
 import { useState } from "react";
 import { User, Lock, LogIn } from "lucide-react";
 import axios from "../utils/axios";
-import { useAuthStore } from "../store/authStore";
+// import { useAuthStore } from "../store/authStore";
+import { useAuth } from "../context/authContext";
+
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const login = useAuthStore((state) => state.login);
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
+  const handleLogin = async () => {
+    const dummyUsers = [
+      { username: "admin", password: "admin123", role: "admin", token: "admintoken" },
+      { username: "kasir", password: "kasir123", role: "kasir", token: "kasirtoken" },
+      { username: "gudang", password: "gudang123", role: "gudang", token: "gudangtoken" },
+    ];
+
+    const found = dummyUsers.find(
+      (u) => u.username === username && u.password === password
+    );
+
+    if (!found) {
+      setError("Username atau password salah");
+      return;
+    }
+
+    login({
+      user: { username: found.username, role: found.role },
+      token: found.token,
+    });
+
+    navigate(`/${found.role}`);
+  };
   // Kalo udah ada backend, aktifin ini
   // const handleLogin = async () => {
   //   setError("");
@@ -57,49 +81,47 @@ export default function Login() {
   // };
 
   //Sementara untuk login dummy tanpa backend
-  const handleLogin = async () => {
-    const dummyUsers = [
-      {
-        username: "admin",
-        password: "admin123",
-        role: "admin",
-        token: "admintoken123",
-      },
-      {
-        username: "kasir",
-        password: "kasir123",
-        role: "kasir",
-        token: "kasirtoken123",
-      },
-      {
-        username: "gudang",
-        password: "gudang123",
-        role: "gudang",
-        token: "gudangtoken123",
-      },
-    ];
+  // const handleLogin = async () => {
+  //   const dummyUsers = [
+  //     {
+  //       username: "admin",
+  //       password: "admin123",
+  //       role: "admin",
+  //       token: "admintoken123",
+  //     },
+  //     {
+  //       username: "kasir",
+  //       password: "kasir123",
+  //       role: "kasir",
+  //       token: "kasirtoken123",
+  //     },
+  //     {
+  //       username: "gudang",
+  //       password: "gudang123",
+  //       role: "gudang",
+  //       token: "gudangtoken123",
+  //     },
+  //   ];
 
-    const found = dummyUsers.find(
-      (u) => u.username === username && u.password === password
-    );
+  //   const found = dummyUsers.find(
+  //     (u) => u.username === username && u.password === password
+  //   );
 
-    if (!found) {
-      alert("Username atau password salah!");
-      return;
-    }
+  //   if (!found) {
+  //     alert("Username atau password salah!");
+  //     return;
+  //   }
 
-    // Simpan ke Zustand
-    login({
-      user: { username: found.username, role: found.role },
-      token: found.token,
-      role: found.role,
-    });
+  //   login({
+  //     user: { username: found.username, role: found.role },
+  //     token: found.token,
+  //   });
 
-    // Redirect sesuai role
-    if (found.role === "admin") navigate("/admin");
-    if (found.role === "kasir") navigate("/kasir");
-    if (found.role === "gudang") navigate("/gudang");
-  };
+  //   // Redirect sesuai role
+  //   if (found.role === "admin") navigate("/admin");
+  //   if (found.role === "kasir") navigate("/kasir");
+  //   if (found.role === "gudang") navigate("/gudang");
+  // };
 
   return (
     <div

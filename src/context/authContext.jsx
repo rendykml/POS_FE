@@ -1,18 +1,59 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (data) => setUser(data);
-  const logout = () => setUser(null);
+  // Load auth dari localStorage
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
+
+    if (savedUser && savedToken) {
+      setUser(JSON.parse(savedUser));
+      setToken(savedToken);
+    }
+    setLoading(false);
+  }, []);
+
+  const login = ({ user, token }) => {
+    setUser(user);
+    setToken(token);
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", token);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        role: user?.role,
+        token,
+        login,
+        logout,
+        loading,
+        isAuthenticated: !!token,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    throw new Error("useAuth must be used inside AuthProvider");
+  }
+  return ctx;
+}
