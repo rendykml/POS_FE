@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 
 import ProductFormModal from "../../components/modals/ProductFormModal";
 
-
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
@@ -43,7 +42,7 @@ export default function ProductPage() {
     setModalOpen(true);
   };
 
-  const handleSubmit = async (data, setError) => {
+  const handleSubmit = async (data) => {
     try {
       setLoadingSubmit(true);
 
@@ -58,10 +57,7 @@ export default function ProductPage() {
       setModalOpen(false);
       fetchProducts();
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Terjadi kesalahan saat menyimpan data"
-      );
+      throw err; // ⬅️ WAJIB supaya modal bisa tampilkan alert
     } finally {
       setLoadingSubmit(false);
     }

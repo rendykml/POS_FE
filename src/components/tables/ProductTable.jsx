@@ -70,13 +70,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
                 Status
               </TableCell>
 
-              {/* UPDATED AT */}
-              <TableCell
-                isHeader
-                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Diupdate
-              </TableCell>
+            
 
               <TableCell
                 isHeader
@@ -134,10 +128,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
                       </Badge>
                     </TableCell>
 
-                    {/* UPDATED AT */}
-                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {formatDate(product.updated_at)}
-                    </TableCell>
+                  
 
                     {/* ACTION */}
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
