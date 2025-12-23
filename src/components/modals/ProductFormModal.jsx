@@ -48,8 +48,7 @@ export default function ProductFormModal({
         price: initialData.price || "",
         cost: initialData.cost || "",
         stock: initialData.stock || "",
-        low_stock_threshold:
-          initialData.low_stock_threshold || "",
+        low_stock_threshold: initialData.low_stock_threshold || "",
       });
     } else {
       setFormData({
@@ -143,9 +142,7 @@ export default function ProductFormModal({
             {initialData ? "Edit Produk" : "Tambah Produk"}
           </h3>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {initialData
-              ? "Perbarui informasi produk"
-              : "Tambahkan produk baru"}
+            {initialData ? "Perbarui informasi produk" : "Masukan produk baru"}
           </p>
         </div>
 
@@ -162,7 +159,7 @@ export default function ProductFormModal({
         <div className="space-y-5">
           {/* KATEGORI */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
               Kategori
             </label>
             <select
@@ -170,7 +167,7 @@ export default function ProductFormModal({
               disabled={loading}
               value={formData.category_id}
               onChange={handleChange}
-              className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+              className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
             >
               <option value="">-- Pilih Kategori --</option>
               {categories.map((cat) => (
@@ -183,7 +180,7 @@ export default function ProductFormModal({
 
           {/* NAMA */}
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
               Nama Produk
             </label>
             <input
@@ -193,14 +190,14 @@ export default function ProductFormModal({
               value={formData.name}
               onChange={handleChange}
               placeholder="Contoh: Kemeja Batik"
-              className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+              className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
             />
           </div>
 
           {/* PRICE & COST */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Harga Jual
               </label>
               <input
@@ -209,12 +206,12 @@ export default function ProductFormModal({
                 disabled={loading}
                 value={formData.price}
                 onChange={handleChange}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+                className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Harga Modal
               </label>
               <input
@@ -223,7 +220,7 @@ export default function ProductFormModal({
                 disabled={loading}
                 value={formData.cost}
                 onChange={handleChange}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+                className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
           </div>
@@ -231,7 +228,7 @@ export default function ProductFormModal({
           {/* STOCK */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Stok
               </label>
               <input
@@ -240,12 +237,12 @@ export default function ProductFormModal({
                 disabled={loading}
                 value={formData.stock}
                 onChange={handleChange}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+                className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
                 Batas Stok Minimum
               </label>
               <input
@@ -254,7 +251,7 @@ export default function ProductFormModal({
                 disabled={loading}
                 value={formData.low_stock_threshold}
                 onChange={handleChange}
-                className="h-11 w-full rounded-lg border border-gray-300 px-4 text-sm"
+                className="dark:bg-dark-900 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pl-4 pr-11 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
               />
             </div>
           </div>
