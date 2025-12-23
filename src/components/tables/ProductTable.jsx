@@ -5,6 +5,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import Badge from "../ui/badge/Badge";
 
 import { Pencil, Trash2, AlertTriangle } from "lucide-react";
 
@@ -29,42 +30,42 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
             <TableRow>
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center "
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400 "
               >
                 Nama Produk
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 SKU
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Kategori
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Harga
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Stok
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Status
               </TableCell>
@@ -72,14 +73,14 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
               {/* UPDATED AT */}
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Diupdate
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-center text-theme-xs font-medium text-gray-500 dark:text-gray-400"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Aksi
               </TableCell>
@@ -99,57 +100,48 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
               </TableRow>
             ) : (
               products.map((product) => {
-                const isLowStock =
-                  product.stock <= product.low_stock_threshold;
+                const isLowStock = product.stock <= product.low_stock_threshold;
 
                 return (
                   <TableRow
                     key={product.id}
                     className="hover:bg-gray-50 dark:hover:bg-white/[0.03]"
                   >
-                    <TableCell className="py-3 text-center font-medium text-gray-800 dark:text-white/90">
+                    <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-800 text-theme-sm dark:text-white/90  ">
                       {product.name}
                     </TableCell>
 
-                    <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {product.sku}
                     </TableCell>
 
-                    <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {product.category?.name || "-"}
                     </TableCell>
 
-                    <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400">
-                      Rp{" "}
-                      {Number(product.price).toLocaleString("id-ID")}
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      Rp {Number(product.price).toLocaleString("id-ID")}
                     </TableCell>
 
-                    <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
                       {product.stock}
                     </TableCell>
 
                     {/* STATUS */}
-                    <TableCell className="py-3 text-center">
-                      {isLowStock ? (
-                        <span className="inline-flex items-center gap-1 text-red-600 text-sm">
-                          <AlertTriangle size={14} />
-                          Low
-                        </span>
-                      ) : (
-                        <span className="text-green-600 text-sm">
-                          Aman
-                        </span>
-                      )}
+                    <TableCell className="px-4 py-3  ">
+                      <Badge size="sm" color={isLowStock ? "error" : "success"}>
+                        {isLowStock ? "Low Stock" : "Ready"}
+                      </Badge>
                     </TableCell>
 
                     {/* UPDATED AT */}
-                    <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400 text-sm">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {formatDate(product.updated_at)}
                     </TableCell>
 
                     {/* ACTION */}
-                    <TableCell className="px-8 py-3">
-                      <div className="flex gap-3 justify-center">
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <div className="flex gap-3 r">
                         <button
                           onClick={() => onEdit?.(product)}
                           className="text-blue-600 hover:text-blue-800"
