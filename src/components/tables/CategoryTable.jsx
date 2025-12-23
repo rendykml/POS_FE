@@ -29,21 +29,21 @@ export default function CategoryTable({ categories = [], onEdit, onDelete }) {
             <TableRow>
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Nama Kategori
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Slug
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Deskripsi
               </TableCell>
@@ -51,14 +51,14 @@ export default function CategoryTable({ categories = [], onEdit, onDelete }) {
               {/* UPDATED AT */}
               <TableCell
                 isHeader
-                className="px-2 py-3 text-theme-xs font-medium text-gray-500 dark:text-gray-400 text-center"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Diupdate
               </TableCell>
 
               <TableCell
                 isHeader
-                className="px-2 py-3 text-center text-theme-xs font-medium text-gray-500 dark:text-gray-400"
+                className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Aksi
               </TableCell>
@@ -82,25 +82,24 @@ export default function CategoryTable({ categories = [], onEdit, onDelete }) {
                   key={cat.id}
                   className="hover:bg-gray-50 dark:hover:bg-white/[0.03]"
                 >
-                  <TableCell className=" py-3 text-center font-medium text-gray-800 dark:text-white/90">
+                  <TableCell className=" px-5 py-4 sm:px-6 text-start text-gray-800 dark:text-white/90">
                     {cat.name}
                   </TableCell>
 
-                  <TableCell className=" py-3 text-center text-gray-500 dark:text-gray-400">
+                  <TableCell className=" px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
                     {cat.slug}
                   </TableCell>
 
-                  <TableCell className="py-3 text-center text-gray-500 dark:text-gray-400">
+                  <TableCell className="px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
                     {cat.description || "-"}
                   </TableCell>
 
-              
-                  <TableCell className=" py-3 text-center text-gray-500 text-sm dark:text-gray-400">
+                  <TableCell className=" px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
                     {formatDate(cat.updated_at)}
                   </TableCell>
 
-                  <TableCell className="px-8 py-3">
-                    <div className="flex gap-3 justify-center">
+                  <TableCell className="px-4 py-3 text-gray-500  dark:text-gray-400">
+                    <div className="flex gap-3 ">
                       <button
                         onClick={() => onEdit?.(cat)}
                         className="text-blue-600 hover:text-blue-800"
