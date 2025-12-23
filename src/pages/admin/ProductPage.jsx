@@ -1,178 +1,129 @@
-import DashboardLayout from "../../layouts/DashboardLayout";
-import ProductFormModal from "../../components/ProductFormModal";
-import Swal from "sweetalert2";
-import { Pencil, Trash2, PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import Swal from "sweetalert2";
+
+import ProductFormModal from "../../components/modals/ProductFormModal";
+
+
+import PageMeta from "../../components/common/PageMeta";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import ComponentCard from "../../components/common/ComponentCard";
+import ProductTable from "../../components/tables/ProductTable";
+import Button from "../../components/ui/button";
+import { Plus } from "lucide-react";
 
 export default function ProductPage() {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
-  const fetchCategories = async () => {
-    const res = await api.get("/categories");
-    setCategories(res.data.data);
-  };
+  /* ======================
+     FETCH PRODUCTS
+  ====================== */
   const fetchProducts = async () => {
     const res = await api.get("/products");
     setProducts(res.data.data);
   };
 
   useEffect(() => {
-    fetchCategories();
     fetchProducts();
   }, []);
 
-  const [openModal, setOpenModal] = useState(false);
-  const [formData, setFormData] = useState({
-    id: null,
-    name: "",
-    category_id: "",
-    price: "",
-    cost: "",
-    stock: "",
-    low_stock_threshold: "",
-  });
-
-  const openAdd = () => {
-    setFormData({
-      id: null,
-      name: "",
-      category_id: "",
-      price: "",
-      cost: "",
-      stock: "",
-      low_stock_threshold: "",
-    });
-    setOpenModal(true);
+  /* ======================
+     HANDLERS
+  ====================== */
+  const handleAdd = () => {
+    setSelectedProduct(null);
+    setModalOpen(true);
   };
 
-  const openEdit = (p) => {
-    setFormData({
-      id: p.id,
-      name: p.name,
-      category_id: p.category_id,
-      price: p.price,
-      cost: p.cost,
-      stock: p.stock,
-      low_stock_threshold: p.low_stock_threshold,
-    });
-    setOpenModal(true);
+  const handleEdit = (product) => {
+    setSelectedProduct(product);
+    setModalOpen(true);
   };
 
-  const saveProduct = async () => {
+  const handleSubmit = async (data, setError) => {
     try {
-      if (formData.id) {
-        await api.put(`/products/${formData.id}`, {
-          name: formData.name,
-          price: formData.price,
-          cost: formData.cost,
-          stock: formData.stock,
-          low_stock_threshold: formData.low_stock_threshold,
-        });
+      setLoadingSubmit(true);
+
+      if (selectedProduct) {
+        await api.put(`/products/${selectedProduct.id}`, data);
         Swal.fire("Berhasil", "Produk diperbarui", "success");
       } else {
-        await api.post("/products", {
-          name: formData.name,
-          category_id: formData.category_id,
-          price: formData.price,
-          cost: formData.cost,
-          stock: formData.stock,
-          low_stock_threshold: formData.low_stock_threshold,
-        });
+        await api.post("/products", data);
         Swal.fire("Berhasil", "Produk ditambahkan", "success");
       }
 
-      setOpenModal(false);
+      setModalOpen(false);
       fetchProducts();
     } catch (err) {
-      Swal.fire(
-        "Error",
-        err.response?.data?.message || "Gagal menyimpan produk",
-        "error"
+      setError(
+        err.response?.data?.message ||
+          "Terjadi kesalahan saat menyimpan data"
       );
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
-  const deleteProduct = async (id) => {
-    Swal.fire({
+  const handleDelete = async (id) => {
+    const confirm = await Swal.fire({
       title: "Hapus produk?",
+      text: "Produk yang dihapus tidak bisa dikembalikan",
       icon: "warning",
       showCancelButton: true,
-    }).then(async (res) => {
-      if (res.isConfirmed) {
-        await api.delete(`/products/${id}`);
-        fetchProducts();
-        Swal.fire("Berhasil", "Produk dihapus", "success");
-      }
     });
+
+    if (!confirm.isConfirmed) return;
+
+    await api.delete(`/products/${id}`);
+    fetchProducts();
+
+    Swal.fire("Berhasil", "Produk dihapus", "success");
   };
 
+  /* ======================
+     RENDER
+  ====================== */
   return (
-    <DashboardLayout>
-      <div className="flex justify-between mb-6">
-        <h1 className="text-3xl font-bold">Manajemen Produk</h1>
+    <div>
+      <PageMeta title="Manajemen Produk | POS" />
+      <PageBreadcrumb pageTitle="Manajemen Produk" />
 
-        <button
-          onClick={openAdd}
-          className="flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg"
-        >
-          <PlusCircle size={20} /> Tambah Produk
-        </button>
-      </div>
+      <ComponentCard className="p-0">
+        {/* HEADER CARD */}
+        <div className="flex items-center pb-4 justify-between border-b border-gray-100 dark:border-gray-800">
+          <h3 className="text-base font-medium text-gray-800 dark:text-white/90">
+            Daftar Produk
+          </h3>
 
-      {/* Table */}
-      <div className="bg-white shadow p-4 rounded-xl">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100 border-b">
-              <th className="p-2">Nama</th>
-              <th className="p-2">Harga Modal</th>
-              <th className="p-2">Harga Jual</th>
-              <th className="p-2">Kategori</th>
-              <th className="p-2">Stok</th>
-              <th className="p-2">Aksi</th>
-            </tr>
-          </thead>
+          <Button
+            size="sm"
+            variant="primary"
+            startIcon={<Plus size={16} />}
+            onClick={handleAdd}
+          >
+            Tambah Produk
+          </Button>
+        </div>
 
-          <tbody>
-            {products.map((p) => (
-              <tr key={p.id} className="border-b hover:bg-gray-50">
-                <td className="p-2">{p.name}</td>
-                <td className="p-2">Rp {p.cost.toLocaleString()}</td>
-                <td className="p-2">Rp {p.price.toLocaleString()}</td>
-                <td className="p-2">{p.category?.name}</td>
-                <td className="p-2">{p.stock}</td>
+        {/* TABLE */}
+        <ProductTable
+          products={products}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </ComponentCard>
 
-                <td className="p-2 flex gap-3">
-                  <button
-                    onClick={() => openEdit(p)}
-                    className="text-blue-600 hover:text-blue-800"
-                  >
-                    <Pencil size={18} />
-                  </button>
-                  <button
-                    onClick={() => deleteProduct(p.id)}
-                    className="text-red-600 hover:text-red-800"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Modal */}
+      {/* MODAL */}
       <ProductFormModal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        formData={formData}
-        setFormData={setFormData}
-        onSubmit={saveProduct}
-        categories={categories}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        initialData={selectedProduct}
+        onSubmit={handleSubmit}
+        loading={loadingSubmit}
       />
-    </DashboardLayout>
+    </div>
   );
 }

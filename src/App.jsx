@@ -5,6 +5,7 @@ import DashboardAdmin from "./pages/admin/DashboardAdmin";
 import DashboardKasir from "./pages/kasir/DashboardKasir";
 import DashboardGudang from "./pages/gudang/DashboardGudang";
 import CategoryPage from "./pages/admin/CategoryPage";
+import ProductPage from "./pages/admin/ProductPage";
 import Login from "./pages/Login";
 
 import ProtectedRoute from "./routers/ProtectedRoute";
@@ -42,6 +43,16 @@ export default function App() {
           element={
             <RoleRoute allowedRoles={["admin"]}>
               <CategoryPage />
+            </RoleRoute>
+          }
+        />
+
+         {/* ADMIN - PRODUCTS */}
+        <Route
+          path="admin/products"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ProductPage />
             </RoleRoute>
           }
         />
