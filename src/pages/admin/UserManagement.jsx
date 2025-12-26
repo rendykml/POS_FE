@@ -75,7 +75,7 @@ export default function UserManagement() {
   };
 
   return (
-    <DashboardLayout>
+  <>
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl font-bold">Manajemen User</h1>
 
@@ -135,6 +135,6 @@ export default function UserManagement() {
         setFormData={setFormData}
         onSubmit={handleSubmit}
       />
-    </DashboardLayout>
+    </>
   );
 }

@@ -1,4 +1,4 @@
-import DashboardLayout from "../../layouts/DashboardLayout";
+
 import { AlertTriangle, PlusCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -14,7 +14,7 @@ export default function LowStockPage() {
   const lowStock = productsDummy.filter((p) => p.stock < p.min);
 
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-3xl font-bold mb-6">Notifikasi Stok Menipis</h1>
 
       {lowStock.length === 0 ? (
@@ -49,6 +49,6 @@ export default function LowStockPage() {
         </div>
       )}
 
-    </DashboardLayout>
+    </>
   );
 }

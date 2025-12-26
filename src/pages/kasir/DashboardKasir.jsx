@@ -1,9 +1,9 @@
-import DashboardLayout from "../../layouts/DashboardLayout";
+
 import { ShoppingCart, History, BarChart3 } from "lucide-react";
 
 export default function DashboardKasir() {
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-3xl font-bold mb-6">Dashboard Kasir</h1>
 
       {/* Cards */}
@@ -33,6 +33,6 @@ export default function DashboardKasir() {
         <h2 className="text-xl font-bold mb-3">Riwayat Transaksi</h2>
         <p className="text-gray-500">(Mock data, backend menyusul)</p>
       </div>
-    </DashboardLayout>
+    </>
   );
 }

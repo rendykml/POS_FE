@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import StockFormModal from "../../components/StockFormModal";
 import Swal from "sweetalert2";
 import { MinusCircle } from "lucide-react";
@@ -44,7 +43,7 @@ export default function StockOutPage() {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <div className="flex justify-between mb-6">
         <h1 className="text-3xl font-bold">Stok Keluar</h1>
         <button
@@ -84,6 +83,6 @@ export default function StockOutPage() {
         onSubmit={saveStock}
         products={productsDummy}
       />
-    </DashboardLayout>
+    </>
   );
 }

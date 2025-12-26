@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import { Search, Trash2 } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -77,7 +76,7 @@ export default function SalesPage() {
   };
 
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-3xl font-bold mb-6">Transaksi Penjualan</h1>
 
       {/* SEARCH PRODUCT */}
@@ -196,6 +195,6 @@ export default function SalesPage() {
           </button>
         </div>
       </div>
-    </DashboardLayout>
+    </>
   );
 }

@@ -1,6 +1,6 @@
-import EcommerceMetrics from "../../components/dashboard/Metrics";
-import MonthlySalesChart from "../../components/dashboard/MonthlySalesChart";
-import RecentOrders from "../../components/dashboard/RecentOrders";
+import Metrics from "../../components/dashboard/Metrics";
+import SalesOverviewChart from "../../components/dashboard/SalesOverviewChart";
+import TopProducts from "../../components/dashboard/TopProducts";
 import PageMeta from "../../components/common/PageMeta";
 
 export default function DashboardAdmin() {
@@ -14,18 +14,32 @@ export default function DashboardAdmin() {
       <div className="grid grid-cols-12 gap-4 md:gap-6">
         {/* METRICS POS */}
         <div className="col-span-12">
-          <EcommerceMetrics />
+          <Metrics />
         </div>
 
         {/* GRAFIK PENJUALAN */}
         <div className="col-span-12 xl:col-span-7">
-          <MonthlySalesChart />
+          <SalesOverviewChart />
         </div>
 
-        {/* TRANSAKSI TERAKHIR */}
+       {/* CHARTS */}
+        {/* <div className="col-span-12 xl:col-span-6">
+          <SalesChart />
+        </div> */}
+
+        {/* <div className="col-span-12 xl:col-span-6">
+          <ProfitChart />
+        </div> */}
+
+        {/* TABLES */}
         <div className="col-span-12 xl:col-span-5">
-          <RecentOrders />
+          <TopProducts />
         </div>
+
+        {/* <div className="col-span-12 xl:col-span-6">
+          <LowStockProducts />
+        </div> */}
+
       </div>
     </>
   );

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import { History, Search, Eye } from "lucide-react";
 
 export default function TransactionHistoryPage() {
@@ -33,7 +32,7 @@ export default function TransactionHistoryPage() {
   ];
 
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-3xl font-bold mb-6">Riwayat Transaksi</h1>
 
       {/* FILTER */}
@@ -143,6 +142,6 @@ export default function TransactionHistoryPage() {
           </div>
         </div>
       )}
-    </DashboardLayout>
+    </>
   );
 }

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
 import { Filter, BarChart3, DollarSign, ShoppingBag } from "lucide-react";
 
 export default function SalesReportPage() {
@@ -16,7 +15,7 @@ export default function SalesReportPage() {
   const totalRevenue = sales.reduce((sum, s) => sum + s.total, 0);
 
   return (
-    <DashboardLayout>
+    <>
       <h1 className="text-3xl font-bold mb-6">Laporan Penjualan</h1>
 
       {/* FILTER */}
@@ -104,6 +103,6 @@ export default function SalesReportPage() {
         </table>
       </div>
 
-    </DashboardLayout>
+    </>
   );
 }
