@@ -44,20 +44,21 @@ export default function Metrics() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6 ">
       {/* TOTAL TRANSAKSI */}
       <MetricCard
         title="Total Transaksi"
         value={data.total_transactions}
-        icon={<ShoppingCart />}
+        icon={<ShoppingCart className="text-gray-700 dark:text-white"/>}
         color="primary"
+        
       />
 
       {/* TOTAL PENJUALAN */}
       <MetricCard
         title="Total Penjualan"
         value={formatCurrency(data.total_amount)}
-        icon={<DollarSign />}
+        icon={<DollarSign className="text-gray-700 dark:text-white"/>}
         color="success"
       />
 
@@ -65,7 +66,7 @@ export default function Metrics() {
       <MetricCard
         title="Total Modal"
         value={formatCurrency(data.total_cost)}
-        icon={<Wallet />}
+        icon={<Wallet className="text-gray-700 dark:text-white"/>}
         color="warning"
       />
 
@@ -73,7 +74,7 @@ export default function Metrics() {
       <MetricCard
         title="Total Profit"
         value={formatCurrency(data.total_profit)}
-        icon={<TrendingUp />}
+        icon={<TrendingUp className="text-gray-700 dark:text-white"/>}
         color="success"
       />
     </div>
