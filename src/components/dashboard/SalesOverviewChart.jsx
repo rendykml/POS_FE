@@ -30,7 +30,7 @@ export default function SalesOverviewChart() {
     };
 
     api
-      .get("/dashboard/sales-chart", { params })
+      .get("/dashboard/chart/sales", { params })
       .then((res) => {
         setData(res.data?.length ? res.data : dummyData);
       })
