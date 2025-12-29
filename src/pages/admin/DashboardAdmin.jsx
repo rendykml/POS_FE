@@ -2,6 +2,8 @@ import Metrics from "../../components/dashboard/Metrics";
 import SalesOverviewChart from "../../components/dashboard/SalesOverviewChart";
 import TopProducts from "../../components/dashboard/TopProducts";
 import PageMeta from "../../components/common/PageMeta";
+import ProfitChart from "../../components/dashboard/ProfitChart";
+import LowStockProducts from "../../components/dashboard/LowStock";
 
 export default function DashboardAdmin() {
   return (
@@ -22,23 +24,19 @@ export default function DashboardAdmin() {
           <SalesOverviewChart />
         </div>
 
-       {/* CHARTS */}
-        {/* <div className="col-span-12 xl:col-span-6">
-          <SalesChart />
-        </div> */}
-
-        {/* <div className="col-span-12 xl:col-span-6">
-          <ProfitChart />
-        </div> */}
-
-        {/* TABLES */}
         <div className="col-span-12 xl:col-span-5">
           <TopProducts />
         </div>
 
-        {/* <div className="col-span-12 xl:col-span-6">
+        <div className="col-span-12 xl:col-span-7">
+          <ProfitChart />
+        </div>
+
+        {/* TABLES */}
+      
+        <div className="col-span-12 xl:col-span-5">
           <LowStockProducts />
-        </div> */}
+        </div>
 
       </div>
     </>
