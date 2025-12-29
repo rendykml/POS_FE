@@ -16,7 +16,7 @@ export default function TopProducts() {
 
   useEffect(() => {
     api
-      .get("/dashboard/top-products")
+      .get("/dashboard/chart/top-products")
       .then((res) => {
         setProducts(res.data || []);
       })
@@ -38,15 +38,15 @@ export default function TopProducts() {
       {/* TABLE */}
       <div className="max-w-full overflow-x-auto">
         <Table>
-          <TableHeader className="border-y border-gray-100 dark:border-gray-800">
+          <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-              <TableCell isHeader className="py-3 text-xs font-medium text-gray-500">
+              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                 Produk
               </TableCell>
-              <TableCell isHeader className="py-3 text-xs font-medium text-gray-500">
+              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                 Terjual
               </TableCell>
-              <TableCell isHeader className="py-3 text-xs font-medium text-gray-500">
+              <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
                 Status
               </TableCell>
             </TableRow>
@@ -70,21 +70,21 @@ export default function TopProducts() {
             )}
 
             {products.map((item) => (
-              <TableRow key={item.product_id}>
+              <TableRow key={item.product_id} className="hover:bg-gray-50 dark:hover:bg-white/[0.03]">
                 {/* PRODUCT */}
-                <TableCell className="py-3">
+                <TableCell className=" px-3 py-4.5 sm:px-2 text-gray-800 dark:text-white/90">
                   <p className="font-medium text-gray-800 dark:text-white/90">
                     {item.product?.name || "-"}
                   </p>
                 </TableCell>
 
                 {/* TOTAL SOLD */}
-                <TableCell className="py-3 text-sm text-gray-500 dark:text-gray-400">
+                <TableCell  className=" px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
                   {item.total_sold} item
                 </TableCell>
 
                 {/* STATUS */}
-                <TableCell className="py-3">
+                <TableCell  className="px-3 py-3 text-gray-500  dark:text-gray-400">
                   <Badge size="sm" color="success">
                     Terlaris
                   </Badge>
