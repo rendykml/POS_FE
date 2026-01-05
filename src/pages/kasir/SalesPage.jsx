@@ -9,6 +9,8 @@ import Button from "../../components/ui/button";
 
 import { Plus, Minus, Trash } from "lucide-react";
 
+console.log("TOKEN:", localStorage.getItem("token"));
+
 /* ======================
    FORMAT
 ====================== */
@@ -50,9 +52,7 @@ export default function CashierPage() {
       const exist = prev.find((i) => i.product_id === product.id);
       if (exist) {
         return prev.map((i) =>
-          i.product_id === product.id
-            ? { ...i, quantity: i.quantity + 1 }
-            : i
+          i.product_id === product.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       }
 
@@ -73,17 +73,12 @@ export default function CashierPage() {
       setCart((prev) => prev.filter((i) => i.product_id !== id));
     } else {
       setCart((prev) =>
-        prev.map((i) =>
-          i.product_id === id ? { ...i, quantity: qty } : i
-        )
+        prev.map((i) => (i.product_id === id ? { ...i, quantity: qty } : i))
       );
     }
   };
 
-  const total = cart.reduce(
-    (sum, i) => sum + i.price * i.quantity,
-    0
-  );
+  const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   /* ======================
      SUBMIT TRANSACTION
@@ -97,10 +92,10 @@ export default function CashierPage() {
     try {
       setLoading(true);
 
-      await api.post("/sales", {
-        items: cart.map((i) => ({
-          product_id: i.product_id,
-          quantity: i.quantity,
+      await api.post("/cashier/sales", {
+        items: cart.map((item) => ({
+          product_id: item.product_id,   
+        quantity: item.quantity,       
         })),
       });
 
@@ -165,7 +160,9 @@ export default function CashierPage() {
       ====================== */}
       <div className="col-span-12 lg:col-span-5">
         <ComponentCard>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/70">Keranjang</h3>
+          <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-400">
+            Keranjang
+          </h3>
 
           {cart.length === 0 ? (
             <p className="text-sm text-gray-500">Belum ada item</p>
@@ -177,13 +174,15 @@ export default function CashierPage() {
                   className="flex items-center justify-between border-b pb-2"
                 >
                   <div>
-                    <p className="font-medium">{item.name}</p>
+                    <p className="font-medium text-gray-800 dark:text-white/80">
+                      {item.name}
+                    </p>
                     <p className="text-sm text-gray-500">
                       {formatCurrency(item.price)}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 text-gray-800 dark:text-white/80">
                     <Button
                       size="sm"
                       variant="outline"
@@ -209,9 +208,7 @@ export default function CashierPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() =>
-                        updateQty(item.product_id, 0)
-                      }
+                      onClick={() => updateQty(item.product_id, 0)}
                     >
                       <Trash size={14} />
                     </Button>
@@ -223,7 +220,9 @@ export default function CashierPage() {
 
           {/* SUMMARY */}
           <div className="mt-6 flex items-center justify-between">
-            <span className="text-lg font-semibold text-gray-800 dark:text-white/70">Total</span>
+            <span className="text-lg font-semibold text-gray-800 dark:text-white/70">
+              Total
+            </span>
             <span className="text-lg font-bold text-gray-800 dark:text-white/70">
               {formatCurrency(total)}
             </span>

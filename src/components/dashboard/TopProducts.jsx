@@ -18,7 +18,7 @@ export default function TopProducts() {
     api
       .get("/dashboard/chart/top-products")
       .then((res) => {
-        setProducts(res.data || []);
+        setProducts((res.data || []).slice(0, 3));
       })
       .catch(() => {
         setProducts([]);
@@ -29,7 +29,7 @@ export default function TopProducts() {
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
       {/* HEADER */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 mt-1 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
           Top Products
         </h3>

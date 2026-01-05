@@ -101,7 +101,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
                     key={product.id}
                     className="hover:bg-gray-50 dark:hover:bg-white/[0.03]"
                   >
-                    <TableCell className="px-5 py-4 sm:px-6 text-start text-gray-800 text-theme-sm dark:text-white/90  ">
+                    <TableCell className="px-5 py-4 sm:px-5 text-start text-gray-800 text-theme-sm dark:text-white/90  ">
                       {product.name}
                     </TableCell>
 
@@ -117,7 +117,7 @@ export default function ProductTable({ products = [], onEdit, onDelete }) {
                       Rp {Number(product.price).toLocaleString("id-ID")}
                     </TableCell>
 
-                    <TableCell className="px-4 py-3 text-gray-500 text-start  dark:text-gray-400">
+                    <TableCell className="px-6 py-3 text-gray-500 text-start  dark:text-gray-400">
                       {product.stock}
                     </TableCell>
 
