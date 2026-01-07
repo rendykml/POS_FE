@@ -7,9 +7,17 @@ import DashboardGudang from "./pages/gudang/DashboardGudang";
 import CategoryPage from "./pages/admin/CategoryPage";
 import ProductPage from "./pages/admin/ProductPage";
 import UserManagementPage from "./pages/admin/UserManagement";
-import SalesReportPage from "./pages/reports/SalesReportPage";
+import SalesReportPage from "./pages/reports/MySalesReportPage";
 import SalesPage from "./pages/kasir/SalesPage";
 import LowStockPage from "./pages/stock/LowStockPage";
+import RoleManagementPage from "./pages/admin/RoleManagement";
+import ReportSummaryPage from "./pages/reports/ReportSummaryPage";
+import ReportTransactionsPage from "./pages/reports/ReportsTransactions";
+import TransactionDetailPage from "./pages/reports/TransactionDetailPage";
+import ReportCashierPage from "./pages/reports/ReportCashierPage";
+import ReportsStockPage from "./pages/reports/ReportStockPage";
+import StockAction from "./pages/stock/StockActionPage";
+import LogsPage from "./pages/stock/LogsPage";
 
 import Login from "./pages/Login";
 
@@ -72,6 +80,16 @@ export default function App() {
             </RoleRoute>
           }
         />
+
+        <Route 
+          path="admin/roles"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <RoleManagementPage />
+            </RoleRoute>
+          }
+        />
+
         {/*admin sales report*/}
         <Route
           path="admin/sales-report"
@@ -81,7 +99,54 @@ export default function App() {
             </RoleRoute>
           }
         />
+        {/*admin report summary*/}
+        <Route
+          path="admin/reports/summary"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ReportSummaryPage />
+            </RoleRoute>
+          }
+        />
 
+        {/*admin report transactions*/}
+        <Route
+          path="admin/reports/transactions"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ReportTransactionsPage />
+            </RoleRoute>
+          }
+        />
+        {/*admin report transaction detail*/}
+        <Route
+          path="admin/reports/transactions/:sale"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <TransactionDetailPage />
+            </RoleRoute>
+          }
+        />
+
+        {/*admin report cashier*/}
+        <Route
+          path="admin/reports/cashier"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ReportCashierPage />
+            </RoleRoute>
+          }
+        />
+
+        {/*admin report stock */}
+        <Route 
+          path="admin/reports/stock"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ReportsStockPage />
+            </RoleRoute>
+          }
+        />
         {/* KASIR */}
         <Route
           path="kasir"
@@ -119,12 +184,22 @@ export default function App() {
             </RoleRoute>
           }
         />
-        {/* GUDANG - LOW STOCK */}
+        {/* GUDANG - STOCK IN */}
         <Route
-          path="gudang/low-stock"
+          path="gudang/stock-in-out"
           element={
             <RoleRoute allowedRoles={["gudang"]}>
-              <LowStockPage/>
+              <StockAction/>
+            </RoleRoute>
+          }
+        />
+      
+        {/* GUDANG - LOGS */}
+        <Route
+          path="gudang/logs"
+          element={
+            <RoleRoute allowedRoles={["gudang"]}>
+              <LogsPage/>
             </RoleRoute>
           }
         />
