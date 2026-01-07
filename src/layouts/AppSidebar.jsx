@@ -76,7 +76,7 @@ export default function AppSidebar() {
       });
     });
 
-    if (!submenuMatched) setOpenSubmenu(null);
+    
   }, [location, isActive]);
 
   useEffect(() => {
