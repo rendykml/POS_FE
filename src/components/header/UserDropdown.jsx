@@ -53,10 +53,10 @@ export default function UserDropdown() {
         {/* USER INFO */}
         <div className="mb-3">
           <span className="block font-medium text-gray-700 dark:text-gray-300">
-            {user.username} ganteng wow
+            {user.username}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            Rendykamaluddin@gmail.com
+            {user.email}
           </span>
         </div>
 
