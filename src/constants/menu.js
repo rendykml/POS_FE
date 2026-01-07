@@ -6,6 +6,7 @@ import {
   BarChart3,
   Boxes,
   Archive,
+  UsersIcon,
 } from "lucide-react";
 
 export const sidebarMenuByRole = {
@@ -16,31 +17,58 @@ export const sidebarMenuByRole = {
         name: "Dashboard",
         path: "/admin",
       },
+
       {
-        icon: Users,
-        name: "Users",
-        path: "/admin/users",
+        icon: UsersIcon,
+        name: "User Management",
+        subItems: [
+          { name: "Users", path: "/admin/users", pro: false },
+          { name: "Roles", path: "/admin/roles", pro: false },
+        ],
       },
+
       {
         icon: Package,
         name: "Products",
         path: "/admin/products",
-        
       },
+
       {
         icon: Boxes,
         name: "Categories",
         path: "/admin/categories",
       },
     ],
+
     others: [
       {
         icon: BarChart3,
         name: "Reports",
-        path: "/admin/sales-report",
+        subItems: [
+          {
+            name: "Summary",
+            path: "/admin/reports/summary",
+            pro: false,
+          },
+          {
+            name: "Transactions",
+            path: "/admin/reports/transactions",
+            pro: false,
+          },
+          {
+            name: "Cashier Report",
+            path: "/admin/reports/cashier",
+            pro: false,
+          },
+          {
+            name: "Stock Report",
+            path: "/admin/reports/stock",
+            pro: false,
+          },
+        ],
       },
     ],
-  },
+  },  
 
   kasir: {
     main: [
@@ -73,20 +101,16 @@ export const sidebarMenuByRole = {
       },
       {
         icon: Archive,
-        name: "Stock In",
-        path: "/gudang/stock-in",
+        name: "Stock In & Out",
+        path: "/gudang/stock-in-out",
       },
-      {
-        icon: Archive,
-        name: "Stock Out",
-        path: "/gudang/stock-out",
-      },
+    
     ],
     others: [
       {
         icon: Package,
-        name: "Low Stock",
-        path: "/gudang/low-stock",
+        name: "Logs",
+        path: "/gudang/logs",
       },
     ],
   },
