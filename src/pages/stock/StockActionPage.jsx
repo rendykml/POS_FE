@@ -58,11 +58,11 @@ export default function WarehousePage() {
   return (
     <div>
       <PageMeta title="Gudang | POS" />
-      <PageBreadcrumb pageTitle="Gudang" />
+      <PageBreadcrumb pageTitle="Kelola Gudang" />
 
       <ComponentCard className="p-0">
         {/* HEADER */}
-        <div className="flex items-center pb-4 justify-between border-b border-gray-100 dark:border-gray-800">
+        <div className="flex items-center pb-4 justify-between border-b border-gray-200 dark:border-gray-500">
           <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
             Stok Gudang
           </h2>
