@@ -5,7 +5,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Shield } from "lucide-react";
 
 const formatDate = (date) => {
   if (!date) return "-";
@@ -18,14 +18,14 @@ const formatDate = (date) => {
   });
 };
 
-export default function RoleTable({ roles = [], onEdit, onDelete }) {
+export default function RoleTable({ roles = [], onEdit, onDelete, onAccess }) {
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
       <div className="max-w-full overflow-x-auto">
         <Table>
           <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
             <TableRow>
-               <TableCell
+              <TableCell
                 isHeader
                 className="px-8 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
@@ -43,10 +43,10 @@ export default function RoleTable({ roles = [], onEdit, onDelete }) {
               >
                 Update At
               </TableCell>
-             
+
               <TableCell
                 isHeader
-              className="px-7 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="px-7 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Aksi
               </TableCell>
@@ -83,6 +83,15 @@ export default function RoleTable({ roles = [], onEdit, onDelete }) {
                         className="text-blue-600 hover:text-blue-800"
                       >
                         <Pencil size={16} />
+                      </button>
+
+                      <button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => onAccess(role)}
+                        className="text-yellow-600 hover:text-yellow-800"
+                      >
+                        <Shield size={16} />
                       </button>
 
                       <button
