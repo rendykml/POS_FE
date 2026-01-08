@@ -3,7 +3,6 @@ import api from "../../services/api";
 
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
-import ComponentCard from "../../components/common/ComponentCard";
 
 import {
   Table,
@@ -13,8 +12,16 @@ import {
   TableRow,
 } from "../../components/ui/table";
 
+/* ======================
+   HELPERS
+====================== */
+
 const formatCurrency = (value) =>
   `Rp ${Number(value || 0).toLocaleString("id-ID")}`;
+
+/* ======================
+   PAGE
+====================== */
 
 export default function ReportsCashierPage() {
   const [rows, setRows] = useState([]);
@@ -27,9 +34,7 @@ export default function ReportsCashierPage() {
     try {
       setLoading(true);
       const res = await api.get("/admin/reports/cashier");
-
-      // ⬇️ SESUAI CONTROLLER (TANPA data WRAPPER)
-      setRows(res.data);
+      setRows(res.data ?? []);
     } catch (err) {
       console.error("Failed to fetch cashier report", err);
     } finally {
@@ -49,57 +54,81 @@ export default function ReportsCashierPage() {
       <PageMeta title="Cashier Report | POS" />
       <PageBreadcrumb pageTitle="Cashier Report" />
 
-      <ComponentCard className="p-0">
+      {/* ================= TABLE ================= */}
+      <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         {/* HEADER */}
-        <div className="flex items-center justify-between border-b px-5 py-4">
+        <div className="border-b border-gray-100 p-8 dark:border-white/[0.05]">
           <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
             Laporan Penjualan per Kasir
           </h2>
         </div>
 
         {/* TABLE */}
-        <div className="overflow-x-auto">
+        <div className="max-w-full overflow-x-auto p-4">
           <Table>
-            <TableHeader>
+            {/* ================= HEADER ================= */}
+            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                <TableCell isHeader>Kasir</TableCell>
-                <TableCell isHeader>Total Transaksi</TableCell>
-                <TableCell isHeader>Total Penjualan</TableCell>
-                <TableCell isHeader>Total Profit</TableCell>
+                {[
+                  "Kasir",
+                  "Total Transaksi",
+                  "Total Penjualan",
+                  "Total Profit",
+                ].map((h) => (
+                  <TableCell
+                    key={h}
+                    isHeader
+                    className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                  >
+                    {h}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHeader>
 
-            <TableBody>
+            {/* ================= BODY ================= */}
+            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-6">
+                  <TableCell
+                    colSpan={4}
+                    className="px-5 py-6 text-center text-gray-500 dark:text-gray-400"
+                  >
                     Memuat data...
                   </TableCell>
                 </TableRow>
               ) : rows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-6">
+                  <TableCell
+                    colSpan={4}
+                    className="px-5 py-6 text-center text-gray-500 dark:text-gray-400"
+                  >
                     Tidak ada data laporan kasir
                   </TableCell>
                 </TableRow>
               ) : (
                 rows.map((row) => (
-                  <TableRow key={row.user_id}>
+                  <TableRow
+                    key={row.user_id}
+                    className="hover:bg-gray-50 dark:hover:bg-white/[0.03]"
+                  >
                     {/* KASIR */}
-                    <TableCell>
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
                       {row.cashier?.name || "-"}
                     </TableCell>
 
                     {/* TOTAL TRANSAKSI */}
-                    <TableCell>{row.total_transactions}</TableCell>
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      {row.total_transactions}
+                    </TableCell>
 
                     {/* TOTAL PENJUALAN */}
-                    <TableCell>
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
                       {formatCurrency(row.total_amount)}
                     </TableCell>
 
                     {/* TOTAL PROFIT */}
-                    <TableCell>
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
                       {formatCurrency(row.total_profit)}
                     </TableCell>
                   </TableRow>
@@ -108,7 +137,7 @@ export default function ReportsCashierPage() {
             </TableBody>
           </Table>
         </div>
-      </ComponentCard>
+      </div>
     </div>
   );
 }
