@@ -76,81 +76,83 @@ export default function WarehouseDashboardPage() {
         />
       </div>
 
-      {/* ================= LOW STOCK ================= */}
-      <ComponentCard className="mt-6 p-0">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
-            Stok Menipis
-          </h2>
-        </div>
+<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+  {/* ================= LOW STOCK ================= */}
+  <ComponentCard className="p-0">
+    <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+      <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
+        Stok Menipis
+      </h2>
+    </div>
 
-        <div className="divide-y">
-          {loading ? (
-            <p className="p-5 text-sm text-gray-500">Memuat data...</p>
-          ) : lowStock.length === 0 ? (
-            <p className="p-5 text-sm text-gray-500">Semua stok aman</p>
-          ) : (
-            lowStock.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between px-5 py-3"
-              >
-                <div>
-                  <p className="font-medium text-gray-800 dark:text-white/90">
-                    {item.name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    Minimum: {item.low_stock_threshold}
-                  </p>
-                </div>
+    <div className="divide-y">
+      {loading ? (
+        <p className="p-5 text-sm text-gray-500">Memuat data...</p>
+      ) : lowStock.length === 0 ? (
+        <p className="p-5 text-sm text-gray-500">Semua stok aman</p>
+      ) : (
+        lowStock.map((item) => (
+          <div
+            key={item.id}
+            className="flex items-center p-4 justify-between border-b border-gray-100 dark:border-gray-800"
+          >
+            <div>
+              <p className="font-medium text-gray-800 dark:text-white/90">
+                {item.name}
+              </p>
+              <p className="text-sm text-gray-500">
+                Minimum: {item.low_stock_threshold}
+              </p>
+            </div>
 
-                <Badge size="sm" color="error">
-                  Stok: {item.stock}
-                </Badge>
-              </div>
-            ))
-          )}
-        </div>
-      </ComponentCard>
+            <Badge size="sm" color="error">
+              Stok: {item.stock}
+            </Badge>
+          </div>
+        ))
+      )}
+    </div>
+  </ComponentCard>
 
-      {/* ================= TOP PRODUCTS ================= */}
-      <ComponentCard className="mt-6 p-0">
-        <div className="border-b px-5 py-4">
-          <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
-            Produk Paling Banyak Keluar
-          </h2>
-        </div>
+  {/* ================= TOP PRODUCTS ================= */}
+  <ComponentCard className="p-0">
+    <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4 dark:border-gray-800">
+      <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
+        Produk Paling Banyak Keluar
+      </h2>
+    </div>
 
-        <div className="divide-y">
-          {loading ? (
-            <p className="p-5 text-sm text-gray-500">Memuat data...</p>
-          ) : topProducts.length === 0 ? (
-            <p className="p-5 text-sm text-gray-500">
-              Belum ada data penjualan
-            </p>
-          ) : (
-            topProducts.map((item, index) => (
-              <div
-                key={item.product_id}
-                className="flex items-center justify-between px-5 py-3"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-500/10">
-                    #{index + 1}
-                  </span>
-                  <p className="font-medium text-gray-800 dark:text-white/90">
-                    {item.product?.name}
-                  </p>
-                </div>
+    <div className="divide-y">
+      {loading ? (
+        <p className="p-5 text-sm text-gray-500">Memuat data...</p>
+      ) : topProducts.length === 0 ? (
+        <p className="p-5 text-sm text-gray-500">
+          Belum ada data penjualan
+        </p>
+      ) : (
+        topProducts.map((item, index) => (
+          <div
+            key={item.product_id}
+            className="flex items-center p-4 justify-between border-b border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-300/10">
+                #{index + 1}
+              </span>
+              <p className="font-medium text-gray-800 dark:text-white/90">
+                {item.product?.name}
+              </p>
+            </div>
 
-                <Badge size="sm" color="info">
-                  Terjual: {item.total_sold}
-                </Badge>
-              </div>
-            ))
-          )}
-        </div>
-      </ComponentCard>
+            <Badge size="sm" color="info">
+              Terjual: {item.total_sold}
+            </Badge>
+          </div>
+        ))
+      )}
+    </div>
+  </ComponentCard>
+      </div>
     </div>
   );
 }
