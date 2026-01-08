@@ -23,7 +23,7 @@ export const sidebarMenuByRole = {
         name: "User Management",
         subItems: [
           { name: "Users", path: "/admin/users", pro: false },
-          { name: "Roles", path: "/admin/roles", pro: false },
+          { name: "Roles Access", path: "/admin/roles", pro: false },
         ],
       },
 

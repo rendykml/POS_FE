@@ -8,6 +8,9 @@ import RoleTable from "../../components/tables/RoleTable";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
+import RoleAccessModal from "../../components/modals/RoleAccessModal";
+
+
 import Button from "../../components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -16,6 +19,7 @@ export default function RolePage() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [accessModalOpen, setAccessModalOpen] = useState(false);
 
   /* ======================
      FETCH ROLES
@@ -32,6 +36,12 @@ export default function RolePage() {
   /* ======================
      HANDLERS
   ====================== */
+
+  const handleAccess = (role) => {
+    setSelectedRole(role);
+    setAccessModalOpen(true);
+  };
+
   const handleAdd = () => {
     setSelectedRole(null);
     setModalOpen(true);
@@ -86,7 +96,7 @@ export default function RolePage() {
   return (
     <div>
       <PageMeta title="Manajemen Role | POS" />
-      <PageBreadcrumb pageTitle="Manajemen Role" />
+      <PageBreadcrumb pageTitle="Manajemen Role & Akses Menu" />
 
       <ComponentCard className="p-0">
         {/* HEADER */}
@@ -101,16 +111,12 @@ export default function RolePage() {
             startIcon={<Plus size={16} />}
             onClick={handleAdd}
           >
-            Tambah Role
+            Tambah Role 
           </Button>
         </div>
 
         {/* TABLE */}
-        <RoleTable
-          roles={roles}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <RoleTable roles={roles} onEdit={handleEdit} onDelete={handleDelete} onAccess={handleAccess} />
       </ComponentCard>
 
       {/* MODAL */}
@@ -120,6 +126,13 @@ export default function RolePage() {
         initialData={selectedRole}
         onSubmit={handleSubmit}
         loading={loadingSubmit}
+      />
+
+      <RoleAccessModal
+        isOpen={accessModalOpen}
+        role={selectedRole}
+        onClose={() => setAccessModalOpen(false)}
+        
       />
     </div>
   );
