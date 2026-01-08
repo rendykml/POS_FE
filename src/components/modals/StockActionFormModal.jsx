@@ -9,72 +9,133 @@ export default function StockActionModal({
   product,
   type, // "IN" | "OUT"
   onSubmit,
-  loading,
+  loading = false,
 }) {
   const [qty, setQty] = useState(1);
   const [note, setNote] = useState("");
-  const [error, setError] = useState(null);
+  const [alert, setAlert] = useState(null);
+  // alert = { variant, title, message }
 
+  /* ======================
+     RESET STATE
+  ====================== */
   useEffect(() => {
     if (isOpen) {
       setQty(1);
       setNote("");
-      setError(null);
+      setAlert(null);
     }
   }, [isOpen, product]);
 
+  /* ======================
+     SUBMIT
+  ====================== */
   const handleSubmit = async () => {
+    if (!qty || qty <= 0) {
+      setAlert({
+        variant: "error",
+        title: "Validasi Gagal",
+        message: "Jumlah stok harus lebih dari 0.",
+      });
+      return;
+    }
+
     try {
+      setAlert(null);
       await onSubmit({
         quantity: qty,
         note,
       });
     } catch (err) {
-      setError(err.response?.data?.message || "Gagal memproses stok");
+      setAlert({
+        variant: "error",
+        title: "Gagal Memproses",
+        message:
+          err?.response?.data?.message || "Terjadi kesalahan pada server.",
+      });
     }
   };
 
   if (!isOpen || !product) return null;
 
+  const isOut = type === "OUT";
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <h3 className="text-lg font-semibold">
-        Stock {type} – {product.name}
-      </h3>
+    <Modal
+      isOpen={isOpen}
+      onClose={loading ? undefined : onClose}
+      className="max-w-[520px] p-6 lg:p-8"
+    >
+      <div className="flex flex-col gap-6">
+        {/* ================= HEADER ================= */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-white/90">
+            {isOut ? "Kurangi Stok" : "Tambah Stok"}
+          </h3>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            {product.name} · Stok saat ini{" "}
+            <span className="font-medium text-gray-700 dark:text-white/80">
+              {product.stock}
+            </span>
+          </p>
+        </div>
 
-      <p className="text-sm text-gray-500">
-        Stok saat ini: {product.stock}
-      </p>
+        {/* ================= ALERT ================= */}
+        {alert && (
+          <Alert
+            variant={alert.variant}
+            title={alert.title}
+            message={alert.message}
+          />
+        )}
 
-      {error && <Alert variant="error" message={error} />}
+        {/* ================= FORM ================= */}
+        <div className="space-y-5">
+          {/* JUMLAH */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+              Jumlah Stok
+            </label>
+            <input
+              type="number"
+              min={1}
+              value={qty}
+              onChange={(e) => setQty(e.target.value)}
+              className="h-11 w-full rounded-lg border px-4 text-sm"
+              placeholder="Masukkan jumlah"
+            />
+          </div>
 
-      <input
-        type="number"
-        min="1"
-        value={qty}
-        onChange={(e) => setQty(Number(e.target.value))}
-        className="w-full h-10 border rounded px-3 mt-3"
-      />
+          {/* CATATAN */}
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+              Catatan
+            </label>
+            <textarea
+              disabled={loading}
+              placeholder="Catatan tambahan (opsional)"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm text-gray-800 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white/90"
+            />
+          </div>
+        </div>
 
-      <textarea
-        placeholder="Catatan"
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        className="w-full border rounded px-3 py-2 mt-3"
-      />
+        {/* ================= FOOTER ================= */}
+        <div className="flex justify-end gap-3 pt-4">
+          <Button variant="outline" onClick={onClose} disabled={loading}>
+            Batal
+          </Button>
 
-      <div className="flex justify-end gap-3 mt-4">
-        <Button variant="outline" onClick={onClose}>
-          Batal
-        </Button>
-
-        <Button
-          variant={type === "OUT" ? "danger" : "primary"}
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {type === "IN" ? "Tambah Stok" : "Kurangi Stok"}
-        </Button>
+          <Button
+            variant={isOut ? "danger" : "primary"}
+            onClick={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? "Memproses..." : isOut ? "Kurangi Stok" : "Tambah Stok"}
+          </Button>
+        </div>
       </div>
     </Modal>
   );
