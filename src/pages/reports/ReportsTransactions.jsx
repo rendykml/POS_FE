@@ -17,14 +17,27 @@ import {
 
 import { Eye } from "lucide-react";
 
-const formatDate = (date) =>
-  new Date(date).toLocaleString("id-ID", {
+/* ======================
+   HELPERS
+====================== */
+
+const formatDate = (date) => {
+  if (!date) return "-";
+  return new Date(date).toLocaleString("id-ID", {
     day: "2-digit",
     month: "short",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
   });
+};
+
+const formatCurrency = (value) =>
+  `Rp ${Number(value || 0).toLocaleString("id-ID")}`;
+
+/* ======================
+   PAGE
+====================== */
 
 export default function ReportsTransactionsPage() {
   const [transactions, setTransactions] = useState([]);
@@ -44,7 +57,7 @@ export default function ReportsTransactionsPage() {
       const res = await api.get("/admin/reports/transactions", {
         params: filters,
       });
-      setTransactions(res.data.data);
+      setTransactions(res.data.data ?? []);
     } catch (err) {
       console.error("Failed to fetch transactions", err);
     } finally {
@@ -64,10 +77,6 @@ export default function ReportsTransactionsPage() {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleApplyFilter = () => {
-    fetchTransactions();
-  };
-
   /* ======================
      RENDER
   ====================== */
@@ -84,7 +93,7 @@ export default function ReportsTransactionsPage() {
             name="start_date"
             value={filters.start_date}
             onChange={handleFilterChange}
-            className="h-10 rounded-lg border border-gray-300 px-3 text-sm dark:bg-gray-900"
+            className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white"
           />
 
           <input
@@ -92,7 +101,7 @@ export default function ReportsTransactionsPage() {
             name="end_date"
             value={filters.end_date}
             onChange={handleFilterChange}
-            className="h-10 rounded-lg border border-gray-300 px-3 text-sm dark:bg-gray-900"
+            className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white"
           />
 
           <input
@@ -101,62 +110,95 @@ export default function ReportsTransactionsPage() {
             placeholder="Cashier ID"
             value={filters.cashier_id}
             onChange={handleFilterChange}
-            className="h-10 rounded-lg border border-gray-300 px-3 text-sm dark:bg-gray-900"
+            className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white"
           />
 
-          <Button variant="primary" onClick={handleApplyFilter}>
+          <Button onClick={fetchTransactions}>
             Terapkan Filter
           </Button>
         </div>
       </ComponentCard>
 
       {/* ================= TABLE ================= */}
-      <ComponentCard className="mt-6 p-0">
-        <div className="border-b px-5 py-4">
+      <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div className="border-b border-gray-100 p-7 dark:border-white/[0.05]">
           <h2 className="text-base font-medium text-gray-800 dark:text-white/90">
             Daftar Transaksi
           </h2>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="max-w-full overflow-x-auto p-4">
           <Table>
-            <TableHeader>
+            {/* ================= HEADER ================= */}
+            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
               <TableRow>
-                <TableCell isHeader>ID</TableCell>
-                <TableCell isHeader>Tanggal</TableCell>
-                <TableCell isHeader>Kasir</TableCell>
-                <TableCell isHeader>Total</TableCell>
-                <TableCell isHeader>Pembayaran</TableCell>
-                <TableCell isHeader>Status</TableCell>
-                <TableCell isHeader>Aksi</TableCell>
+                {[
+                  "ID",
+                  "Tanggal",
+                  "Kasir",
+                  "Total",
+                  "Pembayaran",
+                  "Status",
+                  "Aksi",
+                ].map((h) => (
+                  <TableCell
+                    key={h}
+                    isHeader
+                    className="px-5 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                  >
+                    {h}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHeader>
 
-            <TableBody>
+            {/* ================= BODY ================= */}
+            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-6">
+                  <TableCell
+                    colSpan={7}
+                    className="px-5 py-6 text-center text-gray-500 dark:text-gray-400"
+                  >
                     Memuat data...
                   </TableCell>
                 </TableRow>
               ) : transactions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-6">
+                  <TableCell
+                    colSpan={7}
+                    className="px-5 py-6 text-center text-gray-500 dark:text-gray-400"
+                  >
                     Tidak ada transaksi
                   </TableCell>
                 </TableRow>
               ) : (
                 transactions.map((trx) => (
-                  <TableRow key={trx.id}>
-                    <TableCell>{trx.id}</TableCell>
-                    <TableCell>{formatDate(trx.created_at)}</TableCell>
-                    <TableCell>{trx.cashier?.name || "-"}</TableCell>
-                    <TableCell>
-                      Rp{" "}
-                      {Number(trx.total_amount).toLocaleString("id-ID")}
+                  <TableRow
+                    key={trx.id}
+                    className="hover:bg-gray-50 dark:hover:bg-white/[0.03]"
+                  >
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      #{trx.id}
                     </TableCell>
-                    <TableCell>{trx.payment_method}</TableCell>
-                    <TableCell>
+
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      {formatDate(trx.created_at)}
+                    </TableCell>
+
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      {trx.cashier?.name || "-"}
+                    </TableCell>
+
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      {formatCurrency(trx.total_amount)}
+                    </TableCell>
+
+                    <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
+                      {trx.payment_method}
+                    </TableCell>
+
+                    <TableCell className="px-5 py-4">
                       <Badge
                         size="sm"
                         color={
@@ -170,7 +212,8 @@ export default function ReportsTransactionsPage() {
                         {trx.status}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+
+                    <TableCell className="px-5 py-4">
                       <Button
                         size="sm"
                         variant="outline"
@@ -190,8 +233,7 @@ export default function ReportsTransactionsPage() {
             </TableBody>
           </Table>
         </div>
-      </ComponentCard>
+      </div>
     </div>
   );
 }
- 
