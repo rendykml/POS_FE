@@ -6,8 +6,16 @@ import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import ComponentCard from "../../components/common/ComponentCard";
 import Button from "../../components/ui/button";
 
+/* ======================
+   HELPERS
+====================== */
+
 const formatCurrency = (value) =>
   `Rp ${Number(value || 0).toLocaleString("id-ID")}`;
+
+/* ======================
+   PAGE
+====================== */
 
 export default function MySalesSummaryPage() {
   const [summary, setSummary] = useState(null);
@@ -29,7 +37,6 @@ export default function MySalesSummaryPage() {
           filters.start_date && filters.end_date ? filters : {},
       });
 
-      // ⬇️ DATA SESUAI RESPONSE YANG KAMU KIRIM
       setSummary(res.data);
     } catch (err) {
       console.error("Failed to fetch my sales summary", err);
@@ -58,7 +65,7 @@ export default function MySalesSummaryPage() {
       <PageMeta title="My Sales | POS" />
       <PageBreadcrumb pageTitle="My Sales" />
 
-      {/* FILTER */}
+      {/* ================= FILTER ================= */}
       <ComponentCard>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <input
@@ -66,7 +73,7 @@ export default function MySalesSummaryPage() {
             name="start_date"
             value={filters.start_date}
             onChange={handleChange}
-            className="h-10 rounded-lg border px-3 text-sm"
+            className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white"
           />
 
           <input
@@ -74,16 +81,16 @@ export default function MySalesSummaryPage() {
             name="end_date"
             value={filters.end_date}
             onChange={handleChange}
-            className="h-10 rounded-lg border px-3 text-sm"
+            className="h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-700 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-white"
           />
 
-          <Button variant="primary" onClick={fetchSummary}>
+          <Button onClick={fetchSummary}>
             Terapkan
           </Button>
         </div>
       </ComponentCard>
 
-      {/* SUMMARY */}
+      {/* ================= SUMMARY ================= */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <SummaryCard
           title="Kasir"
@@ -110,7 +117,7 @@ export default function MySalesSummaryPage() {
         />
       </div>
 
-      {/* OPTIONAL DETAIL */}
+      {/* ================= DETAIL ================= */}
       <ComponentCard className="mt-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <DetailRow
@@ -129,20 +136,30 @@ export default function MySalesSummaryPage() {
 
 function SummaryCard({ title, value, loading }) {
   return (
-    <div className="rounded-xl border bg-white p-5 dark:bg-white/[0.03]">
-      <p className="text-sm text-gray-500">{title}</p>
-      <h3 className="mt-1 text-xl font-semibold">
-        {loading ? "-" : value}
-      </h3>
-    </div>
+    <ComponentCard>
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {title}
+          </p>
+          <h3 className="mt-1 text-2xl font-semibold text-gray-800 dark:text-white/90">
+            {loading ? "-" : value}
+          </h3>
+        </div>
+      </div>
+    </ComponentCard>
   );
 }
 
 function DetailRow({ label, value }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border p-4">
-      <span className="text-sm text-gray-500">{label}</span>
-      <span className="text-sm font-medium">{value}</span>
+    <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span className="text-sm text-gray-500 dark:text-gray-400">
+        {label}
+      </span>
+      <span className="text-sm font-medium text-gray-800 dark:text-white/90">
+        {value}
+      </span>
     </div>
   );
 }
