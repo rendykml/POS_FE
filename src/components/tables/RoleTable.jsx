@@ -66,7 +66,7 @@ export default function RoleTable({ roles = [], onEdit, onDelete }) {
             ) : (
               roles.map((role) => (
                 <TableRow key={role.id}>
-                  <TableCell className="px-5 py-4 sm:px-5 text-start text-gray-800 text-theme-sm dark:text-white/90 ">
+                  <TableCell className="px- py-4 sm:px-8 text-start text-gray-800 text-theme-sm dark:text-white/90 ">
                     {role.name}
                   </TableCell>
                   <TableCell className="px-5 py-4 sm:px-5 text-start text-gray-800 text-theme-sm dark:text-white/90  ">
