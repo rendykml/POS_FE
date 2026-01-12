@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "../../components/ui/table";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileText } from "lucide-react";
 
 /* ======================
    HELPERS
@@ -53,9 +53,7 @@ export default function TransactionDetailPage() {
   const fetchDetail = async () => {
     try {
       setLoading(true);
-      const res = await api.get(
-        `/admin/reports/transactions/${sale}`
-      );
+      const res = await api.get(`/admin/reports/transactions/${sale}`);
       setTransaction(res.data);
     } catch (err) {
       console.error("Failed to load transaction detail", err);
@@ -67,6 +65,36 @@ export default function TransactionDetailPage() {
   useEffect(() => {
     fetchDetail();
   }, [sale]);
+
+  /* ======================
+     EXPORT PDF
+  ====================== */
+
+  const handleExportPdf = async () => {
+    try {
+      const res = await api.get(
+        `/admin/reports/transactions/${sale}/export/pdf`,
+        {
+          responseType: "blob",
+        }
+      );
+
+      const url = window.URL.createObjectURL(
+        new Blob([res.data], { type: "application/pdf" })
+      );
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `transaction-${sale}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Gagal export PDF", err);
+    }
+  };
 
   /* ======================
      RENDER
@@ -85,6 +113,14 @@ export default function TransactionDetailPage() {
           onClick={() => navigate(-1)}
         >
           Kembali
+        </Button>
+        <Button
+          size="sm"
+          variant="outline"
+          startIcon={<FileText size={16} />}
+          onClick={handleExportPdf}
+        >
+          Export PDF
         </Button>
       </div>
 
@@ -105,18 +141,12 @@ export default function TransactionDetailPage() {
             </h2>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <InfoRow
-                label="ID Transaksi"
-                value={`#${transaction.id}`}
-              />
+              <InfoRow label="ID Transaksi" value={`#${transaction.id}`} />
               <InfoRow
                 label="Tanggal"
                 value={formatDate(transaction.created_at)}
               />
-              <InfoRow
-                label="Kasir"
-                value={transaction.cashier?.name || "-"}
-              />
+              <InfoRow label="Kasir" value={transaction.cashier?.name || "-"} />
               <InfoRow
                 label="Metode Pembayaran"
                 value={transaction.payment_method}
@@ -158,17 +188,15 @@ export default function TransactionDetailPage() {
                 {/* HEADER */}
                 <TableHeader className="border-b px-7 border-gray-100 dark:border-white/[0.05]">
                   <TableRow>
-                    {["Produk", "Harga", "Qty", "Subtotal"].map(
-                      (h) => (
-                        <TableCell
-                          key={h}
-                          isHeader
-                          className="px-8 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
-                        >
-                          {h}
-                        </TableCell>
-                      )
-                    )}
+                    {["Produk", "Harga", "Qty", "Subtotal"].map((h) => (
+                      <TableCell
+                        key={h}
+                        isHeader
+                        className="px-8 py-3 text-start font-medium text-gray-500 text-theme-xs dark:text-gray-400"
+                      >
+                        {h}
+                      </TableCell>
+                    ))}
                   </TableRow>
                 </TableHeader>
 
@@ -202,9 +230,7 @@ export default function TransactionDetailPage() {
                         </TableCell>
 
                         <TableCell className="px-5 py-4 text-theme-sm text-gray-800 dark:text-white/90">
-                          {formatCurrency(
-                            item.price * item.quantity
-                          )}
+                          {formatCurrency(item.price * item.quantity)}
                         </TableCell>
                       </TableRow>
                     ))
@@ -226,9 +252,7 @@ export default function TransactionDetailPage() {
 function InfoRow({ label, value }) {
   return (
     <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 dark:border-white/[0.05] dark:bg-white/[0.03]">
-      <span className="text-sm text-gray-500 dark:text-gray-400">
-        {label}
-      </span>
+      <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
       <span className="text-sm font-medium text-gray-800 dark:text-white/90">
         {value || "-"}
       </span>
