@@ -18,12 +18,25 @@ export default function WarehousePage() {
      FETCH STOCK
   ====================== */
   const fetchStocks = async () => {
-    const res = await api.get("/warehouse/stocks");
+    const res = await api.get("/warehouse");
     setProducts(res.data);
   };
 
+  const fetchRestockRecommendation = async () => {
+    try {
+      const res = await api.get("/warehouse/restock-recommendation");
+      console.log("RESTOCK RESPONSE:", res.data);
+      setRestockItems(res.data.data || []);
+    } catch (err) {
+      console.error("RESTOCK ERROR:", err.response || err);
+    }
+  };
+
+  const [restockItems, setRestockItems] = useState([]);
+
   useEffect(() => {
     fetchStocks();
+    fetchRestockRecommendation();
   }, []);
 
   /* ======================
@@ -34,14 +47,12 @@ export default function WarehousePage() {
       setLoadingSubmit(true);
 
       await api.post(
-        actionType === "IN"
-          ? "/warehouse/stock-in"
-          : "/warehouse/stock-out",
+        actionType === "IN" ? "/warehouse/stock-in" : "/warehouse/stock-out",
         {
           product_id: selectedProduct.id,
           quantity,
           note,
-        }
+        },
       );
 
       setActionType(null);
@@ -67,6 +78,33 @@ export default function WarehousePage() {
             Stok Gudang
           </h2>
         </div>
+
+        {restockItems.length > 0 && (
+          <ComponentCard className="mb-6 border border-red-200 bg-red-50">
+            <h3 className="text-sm font-semibold text-red-700 mb-3">
+              Rekomendasi Restock
+            </h3>
+
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-red-600">
+                  <th>Produk</th>
+                  <th>Stok Saat Ini</th>
+                  <th>Rekomendasi Order</th>
+                </tr>
+              </thead>
+              <tbody>
+                {restockItems.map((item) => (
+                  <tr key={item.product_id}>
+                    <td>{item.name}</td>
+                    <td>{item.current_stock}</td>
+                    <td className="font-semibold">{item.recommended_order}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </ComponentCard>
+        )}
 
         {/* TABLE */}
         <WarehouseStockTable

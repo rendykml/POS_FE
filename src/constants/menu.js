@@ -3,6 +3,7 @@ import {
   ShoppingCart,
   Package,
   Users,
+  UserStar,
   BarChart3,
   Boxes,
   Archive,
@@ -38,6 +39,12 @@ export const sidebarMenuByRole = {
         name: "Categories",
         path: "/admin/categories",
       },
+
+      {
+        icon: UserStar,
+        name: "Suppliers",
+        path : "/admin/suppliers",
+      }
     ],
 
     others: [

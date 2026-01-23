@@ -9,7 +9,7 @@ import ProductPage from "./pages/admin/ProductPage";
 import UserManagementPage from "./pages/admin/UserManagement";
 import SalesReportPage from "./pages/reports/MySalesReportPage";
 import SalesPage from "./pages/kasir/SalesPage";
-import LowStockPage from "./pages/stock/LowStockPage";
+import SupplierPage from "./pages/supplier/SupplierPage";
 import RoleManagementPage from "./pages/admin/RoleManagement";
 import ReportSummaryPage from "./pages/reports/ReportSummaryPage";
 import ReportTransactionsPage from "./pages/reports/ReportsTransactions";
@@ -86,6 +86,17 @@ export default function App() {
           element={
             <RoleRoute allowedRoles={["admin"]}>
               <RoleManagementPage />
+            </RoleRoute>
+          }
+        />
+
+        {/* ADMIN - SUPPLIERS */}
+
+        <Route
+          path="admin/suppliers"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <SupplierPage />
             </RoleRoute>
           }
         />

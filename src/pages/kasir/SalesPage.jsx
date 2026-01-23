@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 
 import Input from "../../components/form/Input";
 import ComponentCard from "../../components/common/ComponentCard";
-import BaseTable from "../../components/tables/BaseTable";
+import BaseTable from "../../components/tables/baseTable";
 import Button from "../../components/ui/button";
 
 import { Plus, Minus, Trash } from "lucide-react";
@@ -52,7 +52,7 @@ export default function CashierPage() {
       const exist = prev.find((i) => i.product_id === product.id);
       if (exist) {
         return prev.map((i) =>
-          i.product_id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.product_id === product.id ? { ...i, quantity: i.quantity + 1 } : i,
         );
       }
 
@@ -73,8 +73,52 @@ export default function CashierPage() {
       setCart((prev) => prev.filter((i) => i.product_id !== id));
     } else {
       setCart((prev) =>
-        prev.map((i) => (i.product_id === id ? { ...i, quantity: qty } : i))
+        prev.map((i) => (i.product_id === id ? { ...i, quantity: qty } : i)),
       );
+    }
+  };
+
+  /* ======================
+     MIDTRANS PAYMENT
+  ====================== */
+
+  const handlePayMidtrans = async () => {
+    if (cart.length === 0) {
+      Swal.fire("Oops", "Keranjang masih kosong", "warning");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await api.post("/midtrans/create", {
+        amount: total,
+        items: cart.map((item) => ({
+          product_id: item.product_id,
+          quantity: item.quantity,
+        })),
+      });
+
+      const { snap_token, order_id } = res.data;
+
+      window.snap.pay(snap_token, {
+        onSuccess: async () => {
+         
+
+          await api.post(`/midtrans/finalize/${order_id}`);
+
+          Swal.fire("Berhasil", "Pembayaran sukses", "success");
+          setCart([]);
+          fetchProducts();
+        },
+
+        onError: () => Swal.fire("Gagal", "Pembayaran gagal", "error"),
+        onClose: () => Swal.fire("Batal", "Pembayaran dibatalkan", "warning"),
+      });
+    } catch (err) {
+      Swal.fire("Error", "Gagal memproses Midtrans", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,8 +138,8 @@ export default function CashierPage() {
 
       await api.post("/cashier/sales", {
         items: cart.map((item) => ({
-          product_id: item.product_id,   
-        quantity: item.quantity,       
+          product_id: item.product_id,
+          quantity: item.quantity,
         })),
       });
 
@@ -106,7 +150,7 @@ export default function CashierPage() {
       Swal.fire(
         "Gagal",
         err.response?.data?.message || "Transaksi gagal",
-        "error"
+        "error",
       );
     } finally {
       setLoading(false);
@@ -227,13 +271,21 @@ export default function CashierPage() {
               {formatCurrency(total)}
             </span>
           </div>
-
           <Button
             className="mt-4 w-full"
             onClick={handlePay}
             disabled={loading}
           >
             {loading ? "Memproses..." : "Bayar (Cash)"}
+          </Button>
+
+          <Button
+            className=" w-full"
+            variant="outline"
+            onClick={handlePayMidtrans}
+            disabled={loading}
+          >
+            Bayar (Midtrans)
           </Button>
         </ComponentCard>
       </div>
