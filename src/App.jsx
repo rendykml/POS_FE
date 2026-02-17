@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import AppLayout from "./layouts/DashboardLayout";
-
 import DashboardAdmin from "./pages/admin/DashboardAdmin";
 import DashboardKasir from "./pages/kasir/DashboardKasir";
 import DashboardGudang from "./pages/gudang/DashboardGudang";
@@ -18,13 +17,10 @@ import ReportCashierPage from "./pages/reports/ReportCashierPage";
 import ReportsStockPage from "./pages/reports/ReportStockPage";
 import StockAction from "./pages/stock/StockActionPage";
 import LogsPage from "./pages/stock/LogsPage";
-
-import Login from "./pages/Login";
-
+import Login from "./pages/login";
 import ProtectedRoute from "./routers/ProtectedRoute";
 import RoleRoute from "./routers/RoleRoute";
 import RootRedirect from "./routers/RouteRedirect";
-
 
 export default function App() {
   return (
@@ -61,7 +57,7 @@ export default function App() {
           }
         />
 
-         {/* ADMIN - PRODUCTS */}
+        {/* ADMIN - PRODUCTS */}
         <Route
           path="admin/products"
           element={
@@ -81,7 +77,7 @@ export default function App() {
           }
         />
 
-        <Route 
+        <Route
           path="admin/roles"
           element={
             <RoleRoute allowedRoles={["admin"]}>
@@ -150,7 +146,7 @@ export default function App() {
         />
 
         {/*admin report stock */}
-        <Route 
+        <Route
           path="admin/reports/stock"
           element={
             <RoleRoute allowedRoles={["admin"]}>
@@ -200,17 +196,17 @@ export default function App() {
           path="gudang/stock-in-out"
           element={
             <RoleRoute allowedRoles={["gudang"]}>
-              <StockAction/>
+              <StockAction />
             </RoleRoute>
           }
         />
-      
+
         {/* GUDANG - LOGS */}
         <Route
           path="gudang/logs"
           element={
             <RoleRoute allowedRoles={["gudang"]}>
-              <LogsPage/>
+              <LogsPage />
             </RoleRoute>
           }
         />
