@@ -17,7 +17,7 @@ import ReportCashierPage from "./pages/reports/ReportCashierPage";
 import ReportsStockPage from "./pages/reports/ReportStockPage";
 import StockAction from "./pages/stock/StockActionPage";
 import LogsPage from "./pages/stock/LogsPage";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import ProtectedRoute from "./routers/ProtectedRoute";
 import RoleRoute from "./routers/RoleRoute";
 import RootRedirect from "./routers/RouteRedirect";
