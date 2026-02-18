@@ -34,7 +34,6 @@ export default function AppSidebar() {
   const location = useLocation();
 
   // 2️⃣ BARU TURUNAN DARI HOOK
-  
 
   // 3️⃣ BOLEH CONDITIONAL RETURN SETELAH SEMUA HOOK
   // if (!role) {
@@ -55,7 +54,7 @@ export default function AppSidebar() {
 
   const isActive = useCallback(
     (path) => location.pathname === path,
-    [location.pathname]
+    [location.pathname],
   );
 
   useEffect(() => {
@@ -75,8 +74,6 @@ export default function AppSidebar() {
         }
       });
     });
-
-    
   }, [location, isActive]);
 
   useEffect(() => {
@@ -95,7 +92,7 @@ export default function AppSidebar() {
     setOpenSubmenu((prev) =>
       prev && prev.type === menuType && prev.index === index
         ? null
-        : { type: menuType, index }
+        : { type: menuType, index },
     );
   };
 
@@ -211,7 +208,7 @@ export default function AppSidebar() {
     >
       <div className="py-8 px-5">
         <Link to="/">
-          <img src="/images/logo/logo.svg" alt="Logo" width={150} height={40} />
+          <img src="/images/logo/pos2.png" alt="Logo" width={150} height={40} />
         </Link>
       </div>
 
