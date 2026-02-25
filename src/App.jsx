@@ -21,6 +21,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./routers/ProtectedRoute";
 import RoleRoute from "./routers/RoleRoute";
 import RootRedirect from "./routers/RouteRedirect";
+import ReturnPage from "./pages/return/ReturnPage";
 
 export default function App() {
   return (
@@ -53,6 +54,16 @@ export default function App() {
           element={
             <RoleRoute allowedRoles={["admin"]}>
               <CategoryPage />
+            </RoleRoute>
+          }
+        />
+
+        {/* ADMIN - RETURNS */}
+        <Route
+          path="admin/returns"
+          element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ReturnPage />
             </RoleRoute>
           }
         />
@@ -178,6 +189,15 @@ export default function App() {
           element={
             <RoleRoute allowedRoles={["kasir"]}>
               <SalesPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="kasir/returns"
+          element={
+            <RoleRoute allowedRoles={["kasir"]}>
+              <ReturnPage />
             </RoleRoute>
           }
         />
