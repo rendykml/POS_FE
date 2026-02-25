@@ -43,11 +43,16 @@ export const sidebarMenuByRole = {
       {
         icon: UserStar,
         name: "Suppliers",
-        path : "/admin/suppliers",
-      }
+        path: "/admin/suppliers",
+      },
     ],
 
     others: [
+      {
+        icon: Users,
+        name: "Customers",
+        path: "/admin/returns",
+      },
       {
         icon: BarChart3,
         name: "Reports",
@@ -75,7 +80,7 @@ export const sidebarMenuByRole = {
         ],
       },
     ],
-  },  
+  },
 
   kasir: {
     main: [
@@ -83,6 +88,11 @@ export const sidebarMenuByRole = {
         icon: LayoutDashboard,
         name: "Dashboard",
         path: "/kasir",
+      },
+      {
+        icon: Boxes,
+        name: "Returns",
+        path: "/kasir/returns",
       },
       {
         icon: ShoppingCart,
@@ -111,7 +121,6 @@ export const sidebarMenuByRole = {
         name: "Stock In & Out",
         path: "/gudang/stock-in-out",
       },
-    
     ],
     others: [
       {
