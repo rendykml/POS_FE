@@ -168,3 +168,4 @@ export default function SupplierTable({ suppliers = [], onEdit, onReload }) {
     </div>
   );
 }
+    
